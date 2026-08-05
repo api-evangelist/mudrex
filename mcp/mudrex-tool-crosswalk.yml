@@ -1,0 +1,182 @@
+generated: '2026-08-04'
+method: derived
+source: >-
+  mcp/mudrex-mcp.yml (tool list from https://docs.trade.mudrex.com/docs/mcp)
+  bound to the REST endpoints published at
+  https://docs.trade.mudrex.com/docs/quick-reference
+description: >-
+  Binds every tool on Mudrex's hosted MCP server to the REST operation it is
+  backed by. Mudrex publishes NO OpenAPI, so there are no operationIds to bind
+  to — the `rest:` column carries the documented HTTP method + path under
+  https://trade.mudrex.com/fapi/v1 instead. Confidence is set from how directly
+  the docs name the pair; a tool's real input contract can only be recovered
+  from the prose parameter tables on the endpoint doc pages (or an authenticated
+  MCP tools/list), which is the concrete cost of the missing machine-readable
+  contract.
+surfaces:
+  openapi: null   # none published — see x-gap below
+  rest:
+    base_url: https://trade.mudrex.com/fapi/v1
+    docs: https://docs.trade.mudrex.com/docs/quick-reference
+    auth: X-Authentication header (API secret)
+  websocket:
+    url: wss://trade.mudrex.com/fapi/v1/price/ws/linear
+    docs: https://docs.trade.mudrex.com/docs/websocket-streams
+    auth: none (public)
+  mcp:
+    url: https://mudrex.com/mcp
+    gated: true
+    note: tools/list returned HTTP 401 anonymously on 2026-08-04
+  graphql: null
+crosswalk:
+- tool: place_order
+  category: orders
+  rest: ['POST /futures/{asset_id}/order']
+  binding: rest
+  confidence: high
+- tool: amend_order
+  category: orders
+  rest: ['PATCH /futures/orders/{order_id}']
+  binding: rest
+  confidence: high
+  note: REST amend requires both order_price and quantity.
+- tool: cancel_order
+  category: orders
+  rest: ['DELETE /futures/orders/{order_id}']
+  binding: rest
+  confidence: high
+- tool: get_orders
+  category: orders
+  rest: ['GET /futures/orders']
+  binding: rest
+  confidence: high
+- tool: get_order
+  category: orders
+  rest: ['GET /futures/orders/{order_id}']
+  binding: rest
+  confidence: high
+- tool: get_order_history
+  category: orders
+  rest: ['GET /futures/orders/history']
+  binding: rest
+  confidence: high
+- tool: get_positions
+  category: positions
+  rest: ['GET /futures/positions']
+  binding: rest
+  confidence: high
+- tool: close_position
+  category: positions
+  rest: ['POST /futures/positions/{position_id}/close', 'POST /futures/positions/{position_id}/close/partial']
+  binding: rest
+  confidence: medium
+  note: >-
+    The docs describe one close_position tool while REST splits full close and
+    partial close across two endpoints; which one a tool call resolves to is not
+    documented.
+- tool: reverse_position
+  category: positions
+  rest: ['POST /futures/positions/{position_id}/reverse']
+  binding: rest
+  confidence: high
+- tool: get_position_history
+  category: positions
+  rest: ['GET /futures/positions/history']
+  binding: rest
+  confidence: high
+- tool: place_risk_order
+  category: risk
+  rest: ['POST /futures/positions/{position_id}/riskorder']
+  binding: rest
+  confidence: high
+- tool: amend_risk_order
+  category: risk
+  rest: ['PATCH /futures/positions/{position_id}/riskorder']
+  binding: rest
+  confidence: high
+  note: REST amend requires stoploss_order_id / takeprofit_order_id.
+- tool: get_liquidation_price
+  category: risk
+  rest: ['GET /futures/positions/{position_id}/liq-price']
+  binding: rest
+  confidence: high
+- tool: get_leverage
+  category: leverage
+  rest: ['GET /futures/{asset_id}/leverage']
+  binding: rest
+  confidence: high
+- tool: set_leverage
+  category: leverage
+  rest: ['POST /futures/{asset_id}/leverage']
+  binding: rest
+  confidence: high
+- tool: add_margin
+  category: leverage
+  rest: ['POST /futures/positions/{position_id}/add-margin']
+  binding: rest
+  confidence: high
+  note: The REST endpoint both adds and reduces margin; the tool is named add_margin only.
+- tool: list_futures
+  category: markets
+  rest: ['GET /futures']
+  binding: rest
+  confidence: high
+- tool: get_future
+  category: markets
+  rest: ['GET /futures/{asset_id}']
+  binding: rest
+  confidence: high
+- tool: get_available_funds
+  category: account
+  rest: ['GET /futures/funds']
+  binding: rest
+  confidence: medium
+  note: >-
+    "Available funds for trading" maps to the futures wallet read; the spot
+    wallet read (GET /wallet/funds) has no tool.
+- tool: get_fee_history
+  category: account
+  rest: ['GET /futures/fee/history']
+  binding: rest
+  confidence: high
+mcp_only: []
+rest_only:
+- endpoint: 'GET /wallet/funds'
+  capability: wallet
+  note: Spot wallet balance — no MCP tool.
+- endpoint: 'POST /wallet/futures/transfer'
+  capability: wallet
+  note: USDT spot↔futures transfer — no MCP tool; docs tell users to transfer in the app/web platform.
+- endpoint: 'POST /futures/transfers/inr'
+  capability: wallet
+  note: INR spot↔futures transfer — no MCP tool.
+- endpoint: 'GET /futures/transactions'
+  capability: wallet
+  note: Transfer (DEPOSIT/WITHDRAW) history — no MCP tool.
+- endpoint: 'GET /price/kline'
+  capability: market-data
+  note: Public historical OHLCV klines — no MCP tool.
+- endpoint: 'GET /price/mark-kline'
+  capability: market-data
+  note: Public historical mark-price klines — no MCP tool.
+- endpoint: 'WS /price/ws/linear'
+  capability: market-data
+  note: Public live streams — streaming has no MCP equivalent.
+coverage:
+  tools_named: 20
+  tools_bound: 20
+  mcp_only: 0
+  rest_endpoints_documented: 27
+  rest_endpoints_with_a_tool: 20
+  binding_confidence:
+    high: 17
+    medium: 3
+    low: 0
+x-gap:
+  missing: OpenAPI
+  detail: >-
+    Every binding above is to a documented method + path, not an operationId,
+    because Mudrex publishes no OpenAPI (or Swagger, or Postman collection) for
+    the Futures API. Publishing one at https://trade.mudrex.com/openapi.json —
+    or exporting it from the ReadMe docs project — would make this crosswalk
+    machine-verifiable and give every MCP tool a real inputSchema.

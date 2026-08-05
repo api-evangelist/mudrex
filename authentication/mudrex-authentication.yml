@@ -1,0 +1,65 @@
+generated: '2026-08-04'
+method: searched
+source: >-
+  https://docs.trade.mudrex.com/docs/authentication-rate-limits,
+  https://docs.trade.mudrex.com/docs/api-key-management,
+  https://docs.trade.mudrex.com/docs/mcp
+docs: https://docs.trade.mudrex.com/docs/authentication-rate-limits
+description: >-
+  Mudrex runs two independent surfaces with two different auth postures. The
+  public market-data surface (REST klines and the WebSocket stream) is
+  unauthenticated and rate-limited per IP. Every private trading endpoint under
+  /fapi/v1 takes a single API-key header, X-Authentication, carrying the API
+  secret. There is no OAuth, no OIDC, no request signing (no HMAC over the
+  payload), no timestamp/nonce and no scope model — one long-lived bearer
+  secret grants the full trading surface of the account. Issuance is gated on
+  KYC (PAN & Aadhaar) and TOTP two-factor enrollment, and the secret is
+  displayed exactly once at creation.
+summary:
+  types: [apiKey]
+  api_key_in: [header]
+  oauth2_flows: []
+  signing: none
+  scopes: none
+schemes:
+- name: XAuthentication
+  type: apiKey
+  in: header
+  parameter: X-Authentication
+  value: the API secret issued in the Mudrex dashboard
+  applies_to:
+  - mudrex:mudrex-futures-trading-api
+  - mudrex:mudrex-mcp-server
+  sources: [https://docs.trade.mudrex.com/docs/authentication-rate-limits]
+- name: none
+  type: public
+  applies_to: [mudrex:mudrex-market-data-api]
+  detail: >-
+    GET /fapi/v1/price/kline, GET /fapi/v1/price/mark-kline and
+    wss://trade.mudrex.com/fapi/v1/price/ws/linear are public and read-only.
+  sources: [https://docs.trade.mudrex.com/docs/market-data]
+issuance:
+  portal: https://mudrex.com/pro-trading
+  prerequisites:
+  - KYC verification (PAN & Aadhaar)
+  - TOTP two-factor authentication enabled on the account
+  secret_shown_once: true
+  management: https://docs.trade.mudrex.com/docs/api-key-management
+  operations: [view, copy, rotate, revoke]
+failure_modes:
+- status: 401
+  body: '{"success": false, "errors": [{"code": 3100, "text": "Invalid Authentication"}]}'
+  cause: Missing or invalid X-Authentication header.
+- status: 403
+  cause: Scope / IP not allowed.
+  note: >-
+    The error reference names a 403 "Scope / IP not allowed" case, but the docs
+    publish no scope vocabulary and no IP-allowlist configuration page, so the
+    condition that produces it is not documented.
+gaps:
+- No OAuth 2.0 / OIDC and therefore no scopes/ artifact for this provider.
+- No request signing (HMAC), timestamp or nonce — replay protection rests entirely on TLS.
+- No documented key expiry or rotation cadence, and no per-key permission model
+  (read-only vs trade), so an agent integration must be handed a full-trading secret.
+- The same secret authenticates the hosted MCP server, so an MCP client holds
+  full trading authority over the account.

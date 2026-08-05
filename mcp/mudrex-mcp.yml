@@ -1,0 +1,126 @@
+generated: '2026-08-04'
+method: searched
+status: published
+source: https://docs.trade.mudrex.com/docs/mcp
+description: >-
+  Mudrex operates an official hosted MCP server at https://mudrex.com/mcp that
+  converts the Mudrex Futures Trading API into MCP tools for AI assistants.
+  Clients connect through mcp-remote and authenticate with the same
+  X-Authentication API secret used by the REST API (the header is passed on the
+  connection, not an OAuth flow). The tool list below is captured verbatim from
+  the provider's MCP documentation page, including the provider's own
+  "Confirmation required" marking on state-changing tools. A live
+  `tools/list` JSON-RPC POST to https://mudrex.com/mcp returned HTTP 401
+  {"errors":[{"code":3100,"text":"Invalid Authentication"}]} on 2026-08-04, so
+  the machine-readable inputSchema for each tool requires an authenticated
+  introspection and is not captured here.
+server:
+  name: mudrex
+  transport: http
+  url: https://mudrex.com/mcp
+  auth: api-key
+  auth_header: X-Authentication
+  client_config: |
+    {
+      "mcpServers": {
+        "mcp-futures-trading": {
+          "command": "npx",
+          "args": ["-y", "mcp-remote", "https://mudrex.com/mcp", "--header", "X-Authentication:${API_SECRET}"],
+          "env": { "API_SECRET": "<your-api-secret>" }
+        }
+      }
+    }
+x-evidence:
+  fetched: '2026-08-04'
+  url: https://mudrex.com/mcp
+  method: POST tools/list (JSON-RPC 2.0)
+  http_status: 401
+  body: '{"errors":[{"code":3100,"text":"Invalid Authentication"}],"success":false}'
+  note: server is live and auth-gated; tool list sourced from published docs
+tools:
+- name: place_order
+  category: orders
+  description: Place LONG/SHORT (and optionally attach SL/TP)
+  confirmation_required: true
+- name: amend_order
+  category: orders
+  description: Amend an existing order (price / SL / TP)
+  confirmation_required: true
+- name: cancel_order
+  category: orders
+  description: Cancel an order
+  confirmation_required: true
+- name: get_orders
+  category: orders
+  description: List open orders
+  confirmation_required: false
+- name: get_order
+  category: orders
+  description: Fetch a specific order by order_id
+  confirmation_required: false
+- name: get_order_history
+  category: orders
+  description: Historical orders
+  confirmation_required: false
+- name: get_positions
+  category: positions
+  description: List open positions
+  confirmation_required: false
+- name: close_position
+  category: positions
+  description: Close a position
+  confirmation_required: true
+- name: reverse_position
+  category: positions
+  description: Reverse a position
+  confirmation_required: true
+- name: get_position_history
+  category: positions
+  description: Historical positions
+  confirmation_required: false
+- name: place_risk_order
+  category: risk
+  description: Place stop-loss / take-profit on a position
+  confirmation_required: true
+- name: amend_risk_order
+  category: risk
+  description: Amend stop-loss / take-profit on a position
+  confirmation_required: true
+- name: get_liquidation_price
+  category: risk
+  description: Compute liquidation price for a position
+  confirmation_required: false
+- name: get_leverage
+  category: leverage
+  description: Get current leverage for a contract
+  confirmation_required: false
+- name: set_leverage
+  category: leverage
+  description: Set leverage for a contract
+  confirmation_required: true
+- name: add_margin
+  category: leverage
+  description: Add margin to a position
+  confirmation_required: true
+- name: list_futures
+  category: markets
+  description: List all available futures contracts
+  confirmation_required: false
+- name: get_future
+  category: markets
+  description: Get details for a specific contract (by id or symbol)
+  confirmation_required: false
+- name: get_available_funds
+  category: account
+  description: Available funds for trading
+  confirmation_required: false
+- name: get_fee_history
+  category: account
+  description: Fee history
+  confirmation_required: false
+prerequisites:
+- Complete KYC (PAN & Aadhaar) verification on the Mudrex account.
+- Enable TOTP two-factor authentication.
+- Generate an API key at https://mudrex.com/pro-trading and store the secret (shown once).
+- Funds must be moved from the SPOT to the FUTURES wallet via the app or web platform before trading.
+crosswalk: mcp/mudrex-tool-crosswalk.yml

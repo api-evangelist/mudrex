@@ -1,0 +1,157 @@
+generated: '2026-08-04'
+method: searched
+source: https://docs.trade.mudrex.com/docs/error-handling
+docs: https://docs.trade.mudrex.com/docs/error-handling
+format: proprietary
+description: >-
+  Mudrex's published error reference, captured verbatim from the Errors page.
+  Errors are NOT RFC 9457 problem details: every REST surface returns the
+  success envelope with success:false and an errors[] array of {code, text},
+  and the WebSocket surface returns an error object of {code, msg}. The `code`
+  on REST errors mirrors the HTTP status in the published examples rather than
+  carrying a stable machine-readable error identifier, so clients must branch on
+  the human-readable `text` string — which is the main defect in this catalog.
+envelope:
+  rest: '{ "success": false, "errors": [ { "code": <int>, "text": "<message>" } ] }'
+  websocket: '{ "method": "<METHOD>", "id": <int>, "error": { "code": <int>, "msg": "<message>" } }'
+  stable_error_codes: false
+  note: >-
+    One non-HTTP-mirroring code is observable in the wild: an anonymous request
+    to the trading surface returns code 3100 "Invalid Authentication" with HTTP
+    401, so a private numeric code space does exist but is not published.
+http_status_codes:
+- {status: 400, meaning: Bad or missing parameter (invalid request).}
+- {status: 401, meaning: Invalid or missing X-Authentication.}
+- {status: 403, meaning: Scope / IP not allowed.}
+- {status: 404, meaning: Resource not found.}
+- {status: 409, meaning: Conflicting or duplicate action.}
+- {status: 429, meaning: Throttled by the rate limiter.}
+- {status: 5xx, meaning: Internal error; retry with backoff.}
+errors:
+- surface: trading
+  status: 400
+  text: Params error
+  meaning: Missing or invalid order parameters (e.g. missing leverage or order_price).
+- surface: trading
+  status: 400
+  text: invalid trigger type
+  meaning: trigger_type is not MARKET or LIMIT.
+- surface: trading
+  status: 400
+  text: invalid order type
+  meaning: order_type is not LONG or SHORT.
+- surface: trading
+  status: 400
+  text: order price out of permissible range
+  meaning: order_price is outside the asset's min/max price.
+- surface: trading
+  status: 400
+  text: quantity not a multiple of the quantity step
+  meaning: quantity is not a multiple of the asset's quantity_step.
+- surface: trading
+  status: 400
+  text: leverage out of permissible range
+  meaning: leverage is outside the asset's min/max (or 0/negative).
+- surface: trading
+  status: 400
+  text: order quantity out of permissible range
+  meaning: >-
+    Order amend sent without quantity (both order_price and quantity are
+    required), or quantity outside the allowed range.
+- surface: trading
+  status: 400
+  text: risk order id missing
+  meaning: Editing SL/TP without stoploss_order_id / takeprofit_order_id. Fetch them from the open position.
+- surface: trading
+  status: 400
+  text: Position is not in OPEN state
+  meaning: Acting on a position that is not currently open.
+- surface: trading
+  status: 400
+  text: insufficient balance
+  meaning: >-
+    Source wallet lacks funds — or INR was sent to the USDT transfer path
+    (use POST /futures/transfers/inr).
+- surface: trading
+  status: 400
+  text: Invalid trade currency
+  meaning: trade_currency / currency is not USDT or INR.
+- surface: trading
+  status: 401
+  code: 3100
+  text: Invalid Authentication
+  meaning: Missing or invalid X-Authentication header (observed live, not in the published table).
+- surface: trading
+  status: 404
+  text: order not found
+  meaning: The order id is invalid or does not exist.
+- surface: trading
+  status: 404
+  text: Position not found
+  meaning: The position id is invalid or does not exist.
+- surface: trading
+  status: 404
+  text: leverage not found
+  meaning: >-
+    Leverage has never been set for that (asset, currency) pair. Set it first
+    via POST /futures/{asset_id}/leverage.
+- surface: market-data-rest
+  status: 400
+  text: assets are required
+  meaning: The assets parameter was missing or empty.
+- surface: market-data-rest
+  status: 400
+  text: allowed assets size is 25
+  meaning: More than 25 symbols were requested in one call.
+- surface: market-data-rest
+  status: 400
+  text: aggregation not supported
+  meaning: aggregation is not one of the allowed intervals.
+- surface: market-data-rest
+  status: 400
+  text: start and end time should be greater than 0
+  meaning: start_time or end_time was missing or not positive.
+- surface: market-data-rest
+  status: 400
+  text: end time should be greater than start time
+  meaning: end_time was less than or equal to start_time.
+- surface: market-data-rest
+  status: 400
+  text: invalid assets
+  meaning: An asset was not in valid <base>/<quote> format.
+- surface: market-data-rest
+  status: 404
+  text: asset not found
+  meaning: The requested symbol is not recognised.
+- surface: market-data-rest
+  status: 429
+  text: Rate limit exceeded
+  meaning: More than 300 requests per minute from your IP.
+- surface: market-data-rest
+  status: 5xx
+  text: something went wrong
+  meaning: Internal server error; retry with backoff.
+- surface: websocket
+  code: 400
+  msg: invalid JSON
+  meaning: Malformed request body.
+- surface: websocket
+  code: 400
+  msg: unknown method
+  meaning: method is not SUBSCRIBE, UNSUBSCRIBE or LIST_SUBSCRIPTIONS.
+- surface: websocket
+  code: 400
+  msg: 'invalid stream name: <x>'
+  meaning: Unrecognised stream or unsupported interval. All-or-nothing — the whole request is rejected and no state changes.
+- surface: websocket
+  code: 400
+  msg: 'not subscribed: <x>'
+  meaning: Unsubscribing from a stream not currently active.
+- surface: websocket
+  code: 429
+  msg: subscription limit reached
+  meaning: Would exceed 15 active subscriptions on the connection.
+gaps:
+- No stable, documented machine-readable error code vocabulary — REST `code` mirrors the HTTP status in every published example.
+- Not RFC 9457; no application/problem+json media type and no error `type` URIs.
+- No documented retry guidance beyond "retry with backoff" on 5xx, and no Retry-After on 429.

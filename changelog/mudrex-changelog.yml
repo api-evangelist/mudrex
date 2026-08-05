@@ -1,0 +1,102 @@
+generated: '2026-08-04'
+method: searched
+source: https://docs.trade.mudrex.com/docs/changelogs
+docs: https://docs.trade.mudrex.com/docs/changelogs
+description: >-
+  Mudrex publishes a dated release-note changelog for the Futures API. Each
+  entry states its release date, whether it carries breaking changes, whether it
+  deprecates anything, and lists added/changed endpoints and fields with
+  migration notes. Every release from v1.0.0 (5 Nov 2025) to v1.0.9 (26 Jun
+  2026) records "Breaking Changes: No" and "Deprecations: No" — the API has been
+  purely additive since launch. Captured window: the full published history.
+versioning:
+  scheme: uri-path for the API (/fapi/v1) plus a documentation release version
+  current: v1.0.9
+  current_release_date: '2026-06-26'
+  uri_version: v1
+  detail: lifecycle/mudrex-lifecycle.yml
+entries:
+- version: v1.0.9
+  date: '2026-06-26'
+  status: RELEASED
+  breaking: false
+  deprecations: false
+  summary: >-
+    Public market-data endpoints — historical price/mark-price klines (REST) and
+    live kline/mark-kline/ticker streams (WebSocket). No authentication.
+  additions:
+  - 'GET /fapi/v1/price/kline — up to 1440 candles per asset, 6-element OHLCV arrays.'
+  - 'GET /fapi/v1/price/mark-kline — same shape, OHLC only (5-element arrays).'
+  - 'wss://trade.mudrex.com/fapi/v1/price/ws/linear — kline@1s/1m, markKline@1s/1m, ticker@1s/5s with SUBSCRIBE / UNSUBSCRIBE / LIST_SUBSCRIPTIONS and a 40s idle timeout.'
+- version: v1.0.8
+  date: '2026-06-16'
+  status: RELEASED
+  breaking: false
+  deprecations: false
+  summary: >-
+    INR-Margined Futures support (additive) — currency parameter, INR wallet
+    reads, INR transfers, per-(asset, currency) leverage, currency-scoped lists,
+    FX rate fields.
+  additions:
+  - 'trade_currency (USDT | INR) query/body parameter; GET /wallet/funds uses `currency`.'
+  - 'POST /futures/transfers/inr — INR spot↔futures transfer, 202 Accepted with a transaction id.'
+  - 'GET /futures/transactions — transfer history with type/status/sort/limit filters.'
+  - 'Per-(asset, currency) leverage; 404 "leverage not found" when never set.'
+  - 'Additive response fields: trade_currency, hedge_rate, entry_hedge_rate, exit_hedge_rate, gst_amount, collateral_currency_id.'
+  changes:
+  - 'List endpoints return one currency per call, default USDT, never mixed.'
+  migration: No changes required — omitting trade_currency preserves existing USDT behaviour.
+- version: v1.0.7
+  date: '2026-06-02'
+  status: RELEASED
+  breaking: false
+  deprecations: false
+  summary: Fee History response enriched with fee-level metadata including order details and GST information.
+- version: v1.0.6
+  date: '2026-05-12'
+  status: RELEASED
+  breaking: false
+  deprecations: false
+  summary: Higher default API rate limits across all endpoints; wallet endpoints keep separate limits.
+- version: v1.0.5
+  date: '2026-04-21'
+  status: RELEASED
+  breaking: false
+  deprecations: false
+  summary: Official Python SDK released.
+- version: v1.0.4
+  date: '2026-04-15'
+  status: RELEASED
+  breaking: false
+  deprecations: false
+  summary: >-
+    Higher rate limits for high-frequency trading endpoints; GET Open Positions
+    response changed (PnL removed).
+- version: v1.0.3
+  date: '2025-01-22'
+  status: RELEASED
+  breaking: false
+  deprecations: false
+  summary: MCP server integration guide published.
+  note: >-
+    The changelog table dates this entry 22 Jan 2025, which precedes the v1.0.0
+    launch date of 5 Nov 2025; the MCP doc page's own updatedAt is 2026-01-22,
+    so the table year is very likely a typo for 2026.
+- version: v1.0.2
+  date: '2025-12-08'
+  status: RELEASED
+  breaking: false
+  deprecations: false
+  summary: Status code and message update for funds transfer.
+- version: v1.0.1
+  date: '2025-12-05'
+  status: RELEASED
+  breaking: false
+  deprecations: false
+  summary: Margin add/reduce APIs, symbol-first trading, improved errors and payloads.
+- version: v1.0.0
+  date: '2025-11-05'
+  status: RELEASED
+  breaking: false
+  deprecations: false
+  summary: Initial API trading support.

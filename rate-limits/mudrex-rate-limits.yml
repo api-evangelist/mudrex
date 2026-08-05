@@ -1,0 +1,125 @@
+specification: API Commons Rate Limits
+specificationVersion: '0.1'
+schema: https://raw.githubusercontent.com/api-evangelist/interface-research/main/schema/api-commons.yml#/$defs/RateLimits
+provider: Mudrex
+providerId: mudrex
+generated: '2026-08-04'
+method: searched
+created: '2026-08-04'
+modified: '2026-08-04'
+tags:
+- Rate Limiting
+- Futures
+- Trading
+- Market Data
+description: >-
+  Mudrex publishes its rate limits in full. Market data is limited per IP; the
+  trading API is limited per API key across three tiers (default, core-trading,
+  wallet). The two are tracked independently, and the margin currency (USDT or
+  INR) does not change which limit applies. No X-RateLimit-* response headers
+  and no Retry-After are documented — a client only learns it is throttled from
+  the 429 itself.
+sources:
+- https://docs.trade.mudrex.com/docs/authentication-rate-limits
+- https://docs.trade.mudrex.com/docs/faq
+headers:
+  remaining: null
+  limit: null
+  reset: null
+  retryAfter: null
+responseCodes:
+  throttled: 429
+limits:
+- name: Market data REST requests
+  scope: ip
+  metric: requests_per_minute
+  limit: 300
+  timeFrame: minute
+  applies_to: GET /fapi/v1/price/kline, GET /fapi/v1/price/mark-kline
+- name: Market data WebSocket active subscriptions
+  scope: connection
+  metric: subscriptions
+  limit: 15
+  timeFrame: concurrent
+  note: A ticker stream counts as 1 subscription regardless of how many assets it tracks.
+- name: Market data WebSocket new connections
+  scope: ip
+  metric: connections_per_minute
+  limit: 10
+  timeFrame: minute
+- name: Trading API default (per second)
+  scope: api_key
+  metric: requests_per_second
+  limit: 10
+  timeFrame: second
+- name: Trading API default (per minute)
+  scope: api_key
+  metric: requests_per_minute
+  limit: 500
+  timeFrame: minute
+- name: Trading API default (per hour)
+  scope: api_key
+  metric: requests_per_hour
+  limit: 30000
+  timeFrame: hour
+- name: Core trading (per second)
+  scope: api_key
+  metric: requests_per_second
+  limit: 10
+  timeFrame: second
+- name: Core trading (per minute)
+  scope: api_key
+  metric: requests_per_minute
+  limit: 500
+  timeFrame: minute
+- name: Core trading (per hour)
+  scope: api_key
+  metric: requests_per_hour
+  limit: 30000
+  timeFrame: hour
+- name: Core trading (per day)
+  scope: api_key
+  metric: requests_per_day
+  limit: 720000
+  timeFrame: day
+- name: Wallet endpoints (per second)
+  scope: api_key
+  metric: requests_per_second
+  limit: 2
+  timeFrame: second
+- name: Wallet endpoints (per minute)
+  scope: api_key
+  metric: requests_per_minute
+  limit: 50
+  timeFrame: minute
+- name: Wallet endpoints (per hour)
+  scope: api_key
+  metric: requests_per_hour
+  limit: 3000
+  timeFrame: hour
+tiers:
+- id: market-data
+  scope: ip
+  applies_to: [GET /fapi/v1/price/kline, GET /fapi/v1/price/mark-kline, WS /fapi/v1/price/ws/linear]
+- id: core-trading
+  scope: api_key
+  applies_to:
+  - 'POST /futures/{asset_id}/order'
+  - 'DELETE /futures/orders/{order_id}'
+  - 'POST /futures/positions/{position_id}/add-margin'
+  - 'POST /futures/positions/{position_id}/riskorder'
+  - 'PATCH /futures/positions/{position_id}/riskorder'
+  - 'POST /futures/positions/{position_id}/reverse'
+  - 'POST /futures/positions/{position_id}/close/partial'
+  - 'POST /futures/positions/{position_id}/close'
+  - 'GET /futures/{asset_id}/leverage'
+  - 'POST /futures/{asset_id}/leverage'
+- id: wallet
+  scope: api_key
+  applies_to:
+  - 'POST /wallet/funds'
+  - 'POST /wallet/futures/transfer'
+  - 'POST /futures/transfers/inr'
+- id: default
+  scope: api_key
+  applies_to: All trading endpoints not covered by the core-trading or wallet tiers.

@@ -1,0 +1,66 @@
+generated: '2026-08-04'
+method: searched
+source: >-
+  https://docs.trade.mudrex.com/docs/python-sdk, https://pypi.org/project/mudrex-sdk/,
+  https://github.com/mudrex/mudrex-python-sdk, https://api.github.com/orgs/mudrex/repos
+description: >-
+  First-party Mudrex client libraries, verified against the public registries on
+  2026-08-04. Mudrex ships exactly one official SDK — Python — announced in API
+  changelog v1.0.5 (21 April 2026). No first-party JavaScript/TypeScript, Go,
+  Java, Ruby, PHP or .NET client was found on npm, pkg.go.dev, Maven Central,
+  RubyGems, Packagist, crates.io or NuGet, and none is referenced from the docs.
+packages:
+- language: python
+  registry: pypi
+  name: mudrex-sdk
+  version: 0.1.1
+  url: https://pypi.org/project/mudrex-sdk/
+  source: https://github.com/mudrex/mudrex-python-sdk
+  install: pip install mudrex-sdk
+  import: from mudrex import TradeClient
+  requires: Python 3.9+
+  official: true
+  api: mudrex:mudrex-futures-trading-api
+  http_status: 200
+  note: >-
+    Distribution name is `mudrex-sdk`; the import package is `mudrex`. The docs
+    page at https://docs.trade.mudrex.com/docs/python-sdk instructs
+    `pip install mudrex`, which resolves to an unrelated third-party project
+    (see third_party below) — a documentation defect worth reporting to Mudrex.
+third_party:
+- language: python
+  registry: pypi
+  name: mudrex
+  version: 0.1.2
+  url: https://pypi.org/project/mudrex/
+  source: https://github.com/surajiyer/mudrex
+  official: false
+  summary: Send external webhook signals to Mudrex platform.
+  note: >-
+    Community package published by an individual (surajiyer), not by Mudrex Inc.
+    It occupies the exact name the official docs tell developers to install.
+repositories:
+- name: mudrex/mudrex-python-sdk
+  url: https://github.com/mudrex/mudrex-python-sdk
+  language: Python
+  description: Mudrex Python SDK
+  official: true
+- name: mudrex/Mudrex-API
+  url: https://github.com/mudrex/Mudrex-API
+  language: JavaScript
+  description: >-
+    Legacy CaaS (Crypto-as-a-Service) sample clients in JS and Python plus a
+    Postman helper script; last updated 2022 and gated on being a signed partner
+    (support.caas@mudrex.com). Not the current Futures API.
+  official: true
+  archived_in_practice: true
+registries_checked:
+- {registry: pypi, query: mudrex-sdk, result: found}
+- {registry: pypi, query: mudrex, result: found (third-party)}
+- {registry: npm, result: no first-party package found}
+- {registry: pkg.go.dev, result: no first-party client found (mudrex/bybit.go.api is a fork of the Bybit SDK)}
+- {registry: maven-central, result: none}
+- {registry: nuget, result: none}
+- {registry: rubygems, result: none}
+- {registry: packagist, result: none}
+- {registry: crates.io, result: none}

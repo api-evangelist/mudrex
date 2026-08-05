@@ -1,0 +1,117 @@
+generated: '2026-08-04'
+method: searched
+source: >-
+  https://docs.trade.mudrex.com/docs/overview,
+  https://docs.trade.mudrex.com/docs/authentication-rate-limits,
+  https://docs.trade.mudrex.com/docs/error-handling,
+  https://docs.trade.mudrex.com/docs/faq,
+  https://docs.trade.mudrex.com/docs/quick-reference
+description: >-
+  Cross-cutting request/response semantics that apply across every Mudrex
+  Futures API endpoint — auth style, the currency parameter that scopes almost
+  every call, the response envelope, numeric encoding, pagination, versioning,
+  rate-limit tiering and error shape. These are the runtime rules an integrator
+  or an agent has to know and that no OpenAPI expresses for this provider,
+  because Mudrex publishes none.
+
+base_url: https://trade.mudrex.com/fapi/v1
+api_style: REST over HTTPS, JSON request bodies, JSON responses
+
+authentication:
+  scheme: API key in the X-Authentication header (the API secret)
+  public_surface: /fapi/v1/price/* and the WebSocket stream require no auth
+  docs: https://docs.trade.mudrex.com/docs/authentication-rate-limits
+  detail: authentication/mudrex-authentication.yml
+
+idempotency:
+  supported: false
+  mechanism: null
+  detail: >-
+    Mudrex documents no idempotency key, no client-supplied request id and no
+    replay semantics. POST /futures/{asset_id}/order is therefore not safe to
+    retry blind — a timeout on order placement cannot be distinguished from a
+    rejection without reading back GET /futures/orders. For a trading API where
+    the retry hazard is a duplicate leveraged position, this is the single
+    highest-value convention Mudrex is missing.
+
+currency_scoping:
+  parameter: trade_currency
+  values: [USDT, INR]
+  default: USDT
+  placement:
+    GET: query parameter trade_currency
+    POST/PATCH/DELETE: body field trade_currency
+  exception: >-
+    GET /wallet/funds (spot balance) uses `currency`, not `trade_currency`.
+    Passing trade_currency=INR there returns 200 with all-zero balances rather
+    than an error — a silent-wrong-answer trap the docs call out explicitly.
+  list_behaviour: List endpoints return one currency per call and never mix currencies; each item is tagged with trade_currency.
+  invalid_value: 400 "Invalid trade currency"
+  docs: https://docs.trade.mudrex.com/docs/overview
+
+pagination:
+  style: limit + offset, where offset is a time boundary (not a row cursor)
+  request_params:
+    limit: page size on list endpoints
+    offset: >-
+      End-time boundary in Unix milliseconds; results are returned up to that
+      time. Omitted, the current server time is used. This is NOT a row offset —
+      a genuine footgun for anyone assuming SQL-style paging.
+  docs: https://docs.trade.mudrex.com/docs/faq
+
+response_envelope:
+  success: '{ "success": true, "data": ... }'
+  error: '{ "success": false, "errors": [ { "code": <int>, "text": "<message>" } ] }'
+  websocket_error: '{ "method": "SUBSCRIBE", "id": 1, "error": { "code": 400, "msg": "<message>" } }'
+  format: proprietary JSON envelope — not RFC 9457 application/problem+json
+  detail: errors/mudrex-error-codes.yml
+
+numeric_encoding:
+  trading_api: >-
+    Numeric values are returned as JSON strings to preserve precision, and
+    decimal inputs should be sent as strings too (e.g. "0.001", "107526").
+  market_data_api: Returns JSON numbers, not strings — the two surfaces differ.
+  timestamps:
+    trading_api: Unix epoch milliseconds
+    market_data_api: Unix epoch seconds
+  docs: https://docs.trade.mudrex.com/docs/faq
+
+symbol_formats:
+  rest_trading: 'symbol form e.g. BTCUSDT with ?is_symbol on the path parameter, or the asset UUID'
+  rest_market_data: '<base>/<quote> e.g. BTC/USDT'
+  websocket: lowercase, no slash e.g. btcusdt
+  note: Three different symbol encodings across one product — a common source of 404 "asset not found".
+
+versioning:
+  scheme: uri-path
+  current: v1
+  base_path: /fapi/v1
+  release_versioning: >-
+    Documentation/release versions (v1.0.0 … v1.0.9) are tracked in the
+    changelog; the URI version has not changed. Releases have so far been
+    additive, with "Breaking Changes: No" recorded on each entry.
+  detail: lifecycle/mudrex-lifecycle.yml
+
+request_tracing:
+  request_id_header: null
+  detail: >-
+    No request-id or correlation header is documented on the REST surface. The
+    WebSocket envelope carries a client-supplied integer `id` that the server
+    echoes back, which is the only correlation mechanism Mudrex documents.
+
+rate_limit_signaling:
+  status: 429
+  headers: not documented (no X-RateLimit-* / Retry-After published)
+  tiers: [market-data (per IP), trading default (per key), core-trading (per key), wallet (per key)]
+  detail: rate-limits/mudrex-rate-limits.yml
+
+metadata: null
+field_expansion: null
+sparse_fieldsets: null
+
+cross_links:
+  authentication: authentication/mudrex-authentication.yml
+  errors: errors/mudrex-error-codes.yml
+  rate_limits: rate-limits/mudrex-rate-limits.yml
+  lifecycle: lifecycle/mudrex-lifecycle.yml
+  changelog: changelog/mudrex-changelog.yml

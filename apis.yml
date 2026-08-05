@@ -1,18 +1,118 @@
 aid: mudrex
 name: Mudrex
-description: 'Mudrex is a company surfaced via the API Evangelist harvest backlog (source: secondary-market)
-  and added to the network as a stub for full-pipeline profiling.'
+description: 'Mudrex is a US-headquartered, Bengaluru-based crypto investment and
+  trading platform founded in 2018 and registered with India''s Financial Intelligence
+  Unit (FIU-IND). It serves retail and pro traders with spot trading, curated Coin
+  Sets, and USDT- and INR-margined perpetual futures. Its developer surface is the
+  Mudrex Futures API — a REST trading API under https://trade.mudrex.com/fapi/v1
+  covering wallet transfers, asset discovery, leverage and margin type, order
+  create/amend/cancel, position management with stop-loss/take-profit, liquidation
+  pricing and fee history — plus a public, unauthenticated market-data surface
+  (historical price and mark-price klines over REST, live kline/mark-kline/ticker
+  streams over WebSocket) and an officially hosted MCP server at
+  https://mudrex.com/mcp that exposes 20 trading tools to AI agents. Authentication
+  is a single X-Authentication API-key header issued after KYC and TOTP two-factor
+  enrollment. An official Python SDK ships on PyPI as mudrex-sdk.'
 url: https://raw.githubusercontent.com/api-evangelist/mudrex/refs/heads/main/apis.yml
 x-type: company
 x-source: harvest:secondary-market
-x-tier: stub
-x-tier-reason: harvest
+x-tier: profiled
+x-tier-reason: enrichment
 specificationVersion: '0.20'
 created: '2026-08-04'
 modified: '2026-08-04'
+image: https://mudrex.com/favicon.ico
 tags:
 - Company
-apis: []
+- Cryptocurrency
+- Trading
+- Futures
+- Financial Services
+- Fintech
+- Market Data
+- Exchange
+- India
+apis:
+- aid: mudrex:mudrex-futures-trading-api
+  name: Mudrex Futures Trading API
+  humanURL: https://docs.trade.mudrex.com/docs/overview
+  baseURL: https://trade.mudrex.com/fapi/v1
+  tags:
+  - Futures
+  - Trading
+  - Orders
+  - Positions
+  - Leverage
+  - Wallet
+  - Fees
+  description: >-
+    Programmatic control over a Mudrex futures trading account. Transfer funds
+    between the spot and futures wallets (USDT and INR), list tradeable
+    instruments and contract specifications, get and set leverage and margin type
+    per (asset, currency), place market and limit LONG/SHORT orders with optional
+    attached stop-loss and take-profit, amend and cancel orders, query open orders
+    and order history, manage open positions (add/reduce margin, estimate
+    liquidation price, set and edit SL/TP, partial close, reverse, square off),
+    and retrieve trading and funding fee history. Authenticated with an
+    X-Authentication API-key header; responses are a JSON envelope with numeric
+    values as strings to preserve precision.
+  properties:
+  - url: https://docs.trade.mudrex.com/docs/overview
+    type: Documentation
+  - url: https://docs.trade.mudrex.com/docs/quick-reference
+    type: APIReference
+  - url: https://docs.trade.mudrex.com/docs/quickstart
+    type: GettingStarted
+  - url: https://docs.trade.mudrex.com/docs/api-terms-conditions
+    type: TermsOfService
+- aid: mudrex:mudrex-market-data-api
+  name: Mudrex Market Data API
+  humanURL: https://docs.trade.mudrex.com/docs/market-data
+  baseURL: https://trade.mudrex.com/fapi/v1/price
+  tags:
+  - Market Data
+  - Klines
+  - WebSocket
+  - Streaming
+  description: >-
+    Public, unauthenticated market-data surface for Mudrex linear perpetual
+    futures. Over REST it returns bulk historical OHLCV price klines
+    (GET /price/kline, up to 25 assets and 1440 candles per asset) and OHLC
+    mark-price klines (GET /price/mark-kline). Over WebSocket
+    (wss://trade.mudrex.com/fapi/v1/price/ws/linear) it streams 1-second and
+    1-minute klines and mark-klines plus 1-second and 5-second tickers, using a
+    SUBSCRIBE / UNSUBSCRIBE / LIST_SUBSCRIPTIONS envelope. Rate-limited per IP at
+    300 REST requests per minute, 15 active subscriptions per connection and 10
+    new connections per minute.
+  properties:
+  - url: https://docs.trade.mudrex.com/docs/market-data
+    type: Documentation
+  - url: https://docs.trade.mudrex.com/docs/websocket-streams
+    type: WebSocket
+  - url: asyncapi/mudrex-market-data-streams.yml
+    type: EventCatalog
+- aid: mudrex:mudrex-mcp-server
+  name: Mudrex MCP Server
+  humanURL: https://docs.trade.mudrex.com/docs/mcp
+  baseURL: https://mudrex.com/mcp
+  tags:
+  - MCP
+  - Agents
+  - Trading
+  description: >-
+    Mudrex's official hosted Model Context Protocol server, which exposes the
+    Mudrex Futures Trading API to MCP-capable AI assistants as 20 tools across
+    orders, positions, risk management (stop-loss/take-profit), leverage and
+    margin, and market/account info. Connected over mcp-remote with the same
+    X-Authentication API secret used by the REST API; state-changing tools are
+    marked as requiring user confirmation in the provider's documentation.
+  properties:
+  - url: https://docs.trade.mudrex.com/docs/mcp
+    type: Documentation
+  - url: mcp/mudrex-mcp.yml
+    type: MCPServer
+  - url: mcp/mudrex-tool-crosswalk.yml
+    type: ToolCrosswalk
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
@@ -20,4 +120,86 @@ maintainers:
   email: info@apis.io
 common:
 - type: Website
-  url: https://forgeglobal.com/mudrex_stock/
+  url: https://mudrex.com/
+- type: DeveloperPortal
+  url: https://mudrex.com/pro-trading
+- type: Documentation
+  url: https://docs.trade.mudrex.com/docs/overview
+- type: APIReference
+  url: https://docs.trade.mudrex.com/docs/quick-reference
+- type: GettingStarted
+  url: https://docs.trade.mudrex.com/docs/quickstart
+- type: Support
+  url: https://mudrex.com/support
+- type: Blog
+  url: https://mudrex.com/blog/
+- type: GitHubOrganization
+  url: https://github.com/mudrex
+- type: Pricing
+  url: https://mudrex.com/fee-and-compliance
+- type: SignUp
+  url: https://mudrex.com/login
+- type: TermsOfService
+  url: https://mudrex.com/terms
+- type: PrivacyPolicy
+  url: https://mudrex.com/privacy
+- type: Compliance
+  url: https://mudrex.com/security
+- type: TrustCenter
+  url: security/mudrex-trust-center.yml
+- type: DomainSecurity
+  url: security/mudrex-domain-security.yml
+- type: Authentication
+  url: authentication/mudrex-authentication.yml
+- type: Conventions
+  url: conventions/mudrex-conventions.yml
+- type: ErrorCatalog
+  url: errors/mudrex-error-codes.yml
+- type: RateLimits
+  url: rate-limits/mudrex-rate-limits.yml
+- type: Lifecycle
+  url: lifecycle/mudrex-lifecycle.yml
+- type: ChangeLog
+  url: changelog/mudrex-changelog.yml
+- type: Conformance
+  url: conformance/mudrex-conformance.yml
+- type: DataModel
+  url: data-model/mudrex-data-model.yml
+- type: Packages
+  url: packages/mudrex-packages.yml
+- type: SDKs
+  url: packages/mudrex-packages.yml
+- type: MCPServer
+  url: mcp/mudrex-mcp.yml
+- type: ToolCrosswalk
+  url: mcp/mudrex-tool-crosswalk.yml
+- type: AgentSkill
+  url: skills/_index.yml
+- type: LLMsTxt
+  url: llms/mudrex-llms.txt
+x-enrichment:
+  date: '2026-08-04'
+  status: enriched
+  artifacts_added: 21
+  pass: local-v1
+x-coverage:
+  state: covered
+  reason: null
+  detail: >-
+    Mudrex publishes a full REST + WebSocket developer surface, a hosted MCP
+    server and an llms.txt, all readable anonymously — but ships NO
+    machine-readable contract of any kind (no OpenAPI, Swagger, AsyncAPI,
+    GraphQL or Postman collection), so every artifact here is transcribed from
+    prose docs rather than harvested from a spec.
+  evidence:
+  - url: https://docs.trade.mudrex.com/llms.txt
+    status: 200
+  - url: https://trade.mudrex.com/openapi.json
+    status: 404
+  - url: https://docs.trade.mudrex.com/openapi.json
+    status: 404
+  - url: https://mudrex.com/mcp
+    status: 401
+  - url: https://mudrex.com/.well-known/agent-card.json
+    status: 404
+  checked: '2026-08-04'

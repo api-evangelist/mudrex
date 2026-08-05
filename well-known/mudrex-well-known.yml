@@ -1,0 +1,37 @@
+generated: '2026-08-04'
+method: probed
+source: live GET probes of every Mudrex host, 2026-08-04
+description: >-
+  Every /.well-known/ discovery path returned 404 across all three Mudrex hosts.
+  Mudrex publishes no security.txt, no OAuth/OIDC discovery documents, no
+  api-catalog and no agent card. Nothing was saved and NO WellKnown pointer is
+  wired into apis.yml — there is no document to point at. This file exists so a
+  later round does not re-probe blind, and so the absence is recorded as
+  measured rather than assumed.
+hosts:
+- host: mudrex.com
+  documents:
+  - {path: /.well-known/security.txt, status: 404}
+  - {path: /.well-known/openid-configuration, status: 404}
+  - {path: /.well-known/oauth-authorization-server, status: 404}
+  - {path: /.well-known/oauth-protected-resource, status: 404}
+  - {path: /.well-known/api-catalog, status: 404}
+  - {path: /.well-known/ai-plugin.json, status: 404}
+  - {path: /.well-known/agent-card.json, status: 404}
+  - {path: /.well-known/agent.json, status: 404}
+- host: trade.mudrex.com
+  documents:
+  - {path: /.well-known/security.txt, status: 404}
+  - {path: /.well-known/oauth-protected-resource, status: 404}
+  - {path: /.well-known/agent-card.json, status: 404}
+- host: docs.trade.mudrex.com
+  documents:
+  - {path: /.well-known/security.txt, status: 404}
+  - {path: /.well-known/agent-card.json, status: 404}
+notes:
+- >-
+  mudrex.com is a Next.js app whose 404 page returns HTTP 404 (not a 200 SPA
+  catch-all), so these are true misses, not false negatives.
+- >-
+  trade.mudrex.com returns a JSON 404 body
+  {"code": 65536, "text": "requested resource was not found."} for unknown paths.

@@ -1,0 +1,48 @@
+# Mudrex API Documentation
+
+> Official API documentation for Mudrex, a secure and compliant crypto trading platform. Access endpoints for real-time market data and futures trading.
+
+## Guides
+- [Overview](https://docs.trade.mudrex.com/docs/overview.md): Mudrex Futures API gives programmatic control over your Mudrex trading account. You can transfer funds between your spot and futures wallets, list tradeable instruments, set leverage/margin type for each asset, place and manage orders, track open positions, and retrieve fee histories.
+- [Quickstart](https://docs.trade.mudrex.com/docs/quickstart.md): A comprehensive guide to setting up your Mudrex API key and executing your first futures trade through the API
+- [API Key Management](https://docs.trade.mudrex.com/docs/api-key-management.md): Learn how to manage your API keys, including viewing, copying, rotating, and revoking access credentials for secure integration management.
+- [Trading API quick reference](https://docs.trade.mudrex.com/docs/quick-reference.md): A quick overview of all trading actions and their corresponding API endpoints. Use this to find the right endpoint for your workflow.
+- [Authentication & Rate Limits](https://docs.trade.mudrex.com/docs/authentication-rate-limits.md): Learn how to authenticate with Mudrex API using API keys and understand the rate limits enforced for secure trading operations.
+- [Errors](https://docs.trade.mudrex.com/docs/error-handling.md)
+- [Python SDK](https://docs.trade.mudrex.com/docs/python-sdk.md)
+- [MCP Server Integration](https://docs.trade.mudrex.com/docs/mcp.md): Connect AI assistants like Claude to your Mudrex trading account using the Model Context Protocol
+- [Market Data](https://docs.trade.mudrex.com/docs/market-data.md): Public market-data endpoints for API trading: historical price klines and mark-price klines over REST, and live price/mark-price/ticker streaming over WebSocket.
+- [WebSocket Streams](https://docs.trade.mudrex.com/docs/websocket-streams.md): Real-time price klines, mark-price klines, and ticker updates over WebSocket. Public — no authentication required.
+- [Historical Kline](https://docs.trade.mudrex.com/docs/historical-kline.md)
+- [Mark Price Kline](https://docs.trade.mudrex.com/docs/mark-price-kline.md)
+- [Wallet](https://docs.trade.mudrex.com/docs/wallet.md): Endpoints to view your SPOT wallet balance and transfer funds between your SPOT and FUTURES wallets.
+- [Funds (spot)](https://docs.trade.mudrex.com/docs/get-spot-funds.md): Retrieve your current Spot wallet balances. Pass `currency` to choose the wallet currency; omitted defaults to USDT.
+- [Transfer funds](https://docs.trade.mudrex.com/docs/post-transfer-funds.md): Move funds instantly between your spot wallet and futures wallet to manage trading positions and margin requirements. Transfers move funds within a single currency.
+- [Futures Wallet](https://docs.trade.mudrex.com/docs/futures-wallet.md): Endpoints to view your Futures wallet balance and available transfer amount.
+- [Funds (futures)](https://docs.trade.mudrex.com/docs/get-available-funds-futures.md): Fetch your available balance and margin usage from the Futures wallet.
+- [Assets](https://docs.trade.mudrex.com/docs/assets.md): Endpoints to list assets and retrieve individual asset details.
+- [Assets](https://docs.trade.mudrex.com/docs/get-asset-listing.md): Endpoints to list assets and retrieve individual asset details. Get a paginated list of all tradable futures asset.
+- [Asset by id/symbol](https://docs.trade.mudrex.com/docs/get.md): Pull detailed metadata about a specific asset using its ID.
+- [Leverage](https://docs.trade.mudrex.com/docs/leverage.md): Endpoints to get and set leverage for a futures asset.
+- [Leverage by asset id/symbol](https://docs.trade.mudrex.com/docs/get-leverage-by-asset-id.md): Check the leverage level and margin type set for a given asset, in a given currency. Leverage is stored per (asset, currency); the same symbol can carry different leverage in INR and USDT.
+- [Set leverage by asset id/symbol](https://docs.trade.mudrex.com/docs/set.md): Set or update the leverage and margin type for a specific asset, in a specific currency. Setting leverage in one currency does not affect the other; both are independently queryable.
+- [Orders](https://docs.trade.mudrex.com/docs/orders.md): Endpoints to query open and closed orders, retrieve details of a specific order, amend or cancel orders.
+- [Create new order](https://docs.trade.mudrex.com/docs/post-market-order.md): Place a new market or limit order on a chosen trading pair.
+- [Order by id](https://docs.trade.mudrex.com/docs/get-order-by-id.md): Retrieve detailed information about a particular order.
+- [Open orders](https://docs.trade.mudrex.com/docs/get-open-orders.md): View all active (open) orders in your account.
+- [Order history](https://docs.trade.mudrex.com/docs/get-order-history.md): Access historical order data with filters for asset, side, and time.
+- [Cancel order by id](https://docs.trade.mudrex.com/docs/delete-order.md): Cancel a specific order using its unique ID.
+- [Positions](https://docs.trade.mudrex.com/docs/positions.md): Endpoints to query and manage your futures positions, including retrieving open and closed positions, placing and amending risk orders, and closing or reversing positions.
+- [Open Positions](https://docs.trade.mudrex.com/docs/get-open-positions.md): Get detailed info about your currently open positions.
+- [Get Liquidation Price](https://docs.trade.mudrex.com/docs/get-liquidation-price.md): Get estimated liquidation price for a position, optionally with additional margin adjustment.
+- [Add/Reduce Margin](https://docs.trade.mudrex.com/docs/add-margin.md): Add or reduce margin for an existing position to adjust liquidation price.
+- [Set SL/TP](https://docs.trade.mudrex.com/docs/set-sl-tp.md): Define stop-loss and take-profit levels for an existing position.
+- [Edit SL/TP](https://docs.trade.mudrex.com/docs/edit-sl-tp.md): Modify previously set stop-loss or take-profit values on an open position.
+- [Reverse position](https://docs.trade.mudrex.com/docs/reverse.md): Switch an existing position from long to short or vice versa.
+- [Partial Close](https://docs.trade.mudrex.com/docs/partial-close.md): Close a portion of an open position without exiting entirely.
+- [Square off](https://docs.trade.mudrex.com/docs/square-off.md): Close an entire open position immediately.
+- [Position history](https://docs.trade.mudrex.com/docs/get-position-history.md): Review your past closed positions for performance tracking.
+- [Fees](https://docs.trade.mudrex.com/docs/fees.md): Endpoints to retrieve your futures trading and funcding fee history with pagination support using limit and offset parameters.
+- [FAQ](https://docs.trade.mudrex.com/docs/faq.md): This FAQ compiles answers to common questions about using the Mudrex Futures API, such as how to interpret decimals, how rate limits work, which leverage setting takes precedence, and what isolated versus cross margin means.  Refer here for clarifications and best practices that are not covered in the endpoint reference.
+- [Changelogs](https://docs.trade.mudrex.com/docs/changelogs.md): The Changelogs section documents changes across API versions. Each release note summarises newly added endpoints, modifications to existing endpoints, and any deprecations. Use this to track what has changed since the last version and to plan updates to your integration.
+- [API - Terms & Conditions](https://docs.trade.mudrex.com/docs/api-terms-conditions.md)

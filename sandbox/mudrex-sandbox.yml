@@ -1,0 +1,29 @@
+generated: '2026-08-04'
+method: searched
+source: https://docs.trade.mudrex.com/docs/api-terms-conditions
+available: false
+description: >-
+  Mudrex explicitly publishes that it has NO sandbox. This artifact records that
+  stated absence rather than an environment — it is a documented product fact,
+  not a gap we inferred. No `Sandbox` pointer is wired into apis.yml, because
+  there is no test surface to point at.
+statement:
+  clause: '6.3'
+  text: >-
+    You acknowledge that Mudrex does not provide any sandbox, simulation, or
+    testnet environment for the API. All API interactions are executed in a live
+    trading environment, and you bear full responsibility for any consequences
+    arising therefrom.
+  url: https://docs.trade.mudrex.com/docs/api-terms-conditions
+test_mode: null
+test_credentials: null
+test_values: null
+implications:
+- Every integration test places real leveraged orders against real funds.
+- There is no way to exercise the MCP server's confirmation-gated tools safely,
+  which is a notable exposure for agent integrations.
+- Combined with the absence of idempotency keys, a retried order cannot be made safe in a test environment first.
+recommendation_to_provider: >-
+  A read-only or simulated futures environment (even a paper-trading key class)
+  would materially de-risk API and agent onboarding; today the first call a
+  developer makes is a live one.

@@ -1,0 +1,84 @@
+generated: '2026-08-04'
+method: derived
+source: >-
+  Derived from the documented endpoint surface and response fields at
+  https://docs.trade.mudrex.com/docs/quick-reference and the per-endpoint pages
+  (assets, leverage, orders, positions, fees, wallet). No OpenAPI exists, so no
+  schema $refs were available — relationships are read from documented path
+  parameters and id-bearing response fields only.
+description: >-
+  The entity graph behind the Mudrex Futures API. Six core entities: Asset (a
+  tradable linear perpetual contract), Leverage (a per-asset-per-currency
+  setting), Order, Position, Fee record and Wallet/Transaction. The distinctive
+  shape is that Leverage, Order, Position and Fee are all scoped by
+  trade_currency (USDT or INR), so the same asset carries independent state in
+  each currency.
+entities:
+- name: Asset
+  description: A tradable futures contract with its specifications (price/quantity steps, leverage bounds, funding interval).
+  id_field: asset_id
+  id_form: UUID, or the trading symbol when ?is_symbol is present (e.g. BTCUSDT)
+  endpoints: ['GET /futures', 'GET /futures/{asset_id}']
+  currency_scoped: false
+- name: Leverage
+  description: Leverage value and margin type for one (asset, currency) pair.
+  fields: [leverage, margin_type, collateral_currency_id]
+  endpoints: ['GET /futures/{asset_id}/leverage', 'POST /futures/{asset_id}/leverage']
+  currency_scoped: true
+- name: Order
+  description: A market or limit LONG/SHORT order, optionally carrying attached stop-loss and take-profit.
+  id_field: order_id
+  fields: [order_type, trigger_type, order_price, quantity, leverage, reduce_only, is_stoploss, is_takeprofit, stoploss_price, takeprofit_price, trade_currency, hedge_rate]
+  endpoints: ['POST /futures/{asset_id}/order', 'GET /futures/orders', 'GET /futures/orders/{order_id}', 'PATCH /futures/orders/{order_id}', 'DELETE /futures/orders/{order_id}', 'GET /futures/orders/history']
+  currency_scoped: true
+- name: Position
+  description: An open or closed futures position with margin, risk orders and liquidation state.
+  id_field: position_id
+  fields: [trade_currency, entry_hedge_rate, exit_hedge_rate, stoploss_order_id, takeprofit_order_id]
+  endpoints: ['GET /futures/positions', 'GET /futures/positions/history', 'POST /futures/positions/{position_id}/close', 'POST /futures/positions/{position_id}/close/partial', 'POST /futures/positions/{position_id}/reverse', 'POST /futures/positions/{position_id}/add-margin', 'GET /futures/positions/{position_id}/liq-price', 'POST /futures/positions/{position_id}/riskorder', 'PATCH /futures/positions/{position_id}/riskorder']
+  currency_scoped: true
+- name: RiskOrder
+  description: A stop-loss or take-profit order attached to a position, referenced by its own id.
+  id_field: stoploss_order_id / takeprofit_order_id
+  endpoints: ['POST /futures/positions/{position_id}/riskorder', 'PATCH /futures/positions/{position_id}/riskorder']
+  currency_scoped: true
+- name: Fee
+  description: A trading or funding fee record.
+  id_field: id
+  fields: [gst_amount, order details, trade_currency]
+  endpoints: ['GET /futures/fee/history']
+  currency_scoped: true
+- name: Wallet
+  description: The SPOT and FUTURES wallets, per currency.
+  fields: [balance, locked_amount, first_time_user]
+  endpoints: ['GET /wallet/funds', 'GET /futures/funds']
+  currency_scoped: true
+- name: Transaction
+  description: A transfer between the SPOT and FUTURES wallets (DEPOSIT / WITHDRAW).
+  id_field: id
+  endpoints: ['POST /wallet/futures/transfer', 'POST /futures/transfers/inr', 'GET /futures/transactions']
+  currency_scoped: true
+- name: Kline
+  description: A market-data candle — 6-element OHLCV array (price) or 5-element OHLC array (mark price).
+  endpoints: ['GET /price/kline', 'GET /price/mark-kline', 'WS kline@*, markKline@*']
+  currency_scoped: false
+relationships:
+- {from: Leverage, to: Asset, kind: belongs_to, via: asset_id}
+- {from: Order, to: Asset, kind: belongs_to, via: asset_id}
+- {from: Order, to: Leverage, kind: has_one, via: 'leverage (resolved per (asset, currency))'}
+- {from: Position, to: Asset, kind: belongs_to, via: asset_id}
+- {from: Position, to: Order, kind: has_many, via: 'orders that opened/modified the position'}
+- {from: Position, to: RiskOrder, kind: has_many, via: 'stoploss_order_id, takeprofit_order_id'}
+- {from: Fee, to: Order, kind: belongs_to, via: order details on the fee record}
+- {from: Transaction, to: Wallet, kind: belongs_to, via: 'from_wallet_type, to_wallet_type'}
+- {from: Kline, to: Asset, kind: belongs_to, via: symbol}
+currency_dimension:
+  parameter: trade_currency
+  values: [USDT, INR]
+  effect: >-
+    Leverage, Order, Position, Fee, Wallet and Transaction all exist
+    independently per currency for the same Asset. List endpoints never mix
+    currencies. Asset and Kline are the only currency-invariant entities.
+gaps:
+- No published schemas — field lists above are read from prose tables and examples, not from a machine-readable contract.
+- No documented id prefixes or id formats beyond "asset UUID"; order/position id formats are not specified.

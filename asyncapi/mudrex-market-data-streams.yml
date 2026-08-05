@@ -1,0 +1,73 @@
+generated: '2026-08-04'
+method: searched
+source: >-
+  https://docs.trade.mudrex.com/docs/websocket-streams,
+  https://docs.trade.mudrex.com/docs/market-data
+spec_type: none
+description: >-
+  Mudrex runs a real, public event surface — a WebSocket streaming API for
+  klines, mark-price klines and tickers — but publishes NO AsyncAPI document for
+  it, and no webhooks at all. This artifact is the honest capture of the
+  documented channel catalog and protocol envelope; it is NOT an AsyncAPI
+  document and no AsyncAPI pointer is wired into apis.yml, because none exists
+  to point at. Publishing an AsyncAPI 3.x document for this endpoint is the
+  single cheapest machine-readability win available to Mudrex.
+surface:
+  kind: websocket
+  url: wss://trade.mudrex.com/fapi/v1/price/ws/linear
+  authentication: none (public, read-only)
+  docs: https://docs.trade.mudrex.com/docs/websocket-streams
+  introduced: v1.0.9 (2026-06-26)
+webhooks:
+  supported: false
+  detail: Mudrex documents no outbound webhook/callback surface for order, position or fee events.
+protocol:
+  request_envelope:
+    id: int — client correlation id, echoed back by the server
+    method: SUBSCRIBE | UNSUBSCRIBE | LIST_SUBSCRIPTIONS
+    params: string[] — stream names
+    assets: string[] — applied only when a ticker stream is in params
+  success_response: '{ "method": "SUBSCRIBE", "id": 1, "result": "success" }'
+  error_response: '{ "method": "SUBSCRIBE", "id": 1, "error": { "code": 400, "msg": "invalid stream name: kline@5m@btcusdt" } }'
+  semantics: All-or-nothing — if any stream in params is invalid the whole request is rejected and no state changes.
+  keepalive:
+    idle_timeout_seconds: 40
+    recommended_ping_seconds: 20
+    persistence: Subscriptions are per-connection and are not persisted; re-subscribe after a reconnect.
+  symbol_format: lowercase, no slash (e.g. btcusdt) — differs from the REST market-data <base>/<quote> form
+channels:
+- name: kline@1s@<symbol>
+  payload: OHLCV candle
+  interval: 1s
+- name: kline@1m@<symbol>
+  payload: OHLCV candle
+  interval: 1m
+- name: markKline@1s@<symbol>
+  payload: OHLC mark price, no volume
+  interval: 1s
+- name: markKline@1m@<symbol>
+  payload: OHLC mark price, no volume
+  interval: 1m
+- name: ticker@1s
+  payload: changed prices, pushed every 1 second
+  assets_in: assets[]
+  note: One-time snapshot on subscribe; counts as a single subscription regardless of asset count.
+- name: ticker@5s
+  payload: changed prices, pushed every 5 seconds
+  assets_in: assets[]
+  note: One-time snapshot on subscribe; counts as a single subscription regardless of asset count.
+rest_companions:
+- {endpoint: 'GET /fapi/v1/price/kline', description: 'Bulk historical OHLCV klines — ≤25 assets, ≤1440 candles per asset.'}
+- {endpoint: 'GET /fapi/v1/price/mark-kline', description: 'Bulk historical mark-price klines (OHLC only).'}
+limits:
+  subscriptions_per_connection: 15
+  new_connections_per_minute_per_ip: 10
+  rest_requests_per_minute_per_ip: 300
+  detail: rate-limits/mudrex-rate-limits.yml
+errors: errors/mudrex-error-codes.yml
+recommendation_to_provider: >-
+  Publish an AsyncAPI 3.x document at a stable URL (e.g.
+  https://trade.mudrex.com/asyncapi.yaml) describing these six channels, the
+  SUBSCRIBE/UNSUBSCRIBE operations and the message schemas. The channel catalog,
+  envelope and limits are already written in prose — the spec is a transcription,
+  not new work.

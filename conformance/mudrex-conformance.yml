@@ -1,0 +1,99 @@
+generated: '2026-08-04'
+method: searched
+source: >-
+  https://docs.trade.mudrex.com/docs/authentication-rate-limits,
+  https://docs.trade.mudrex.com/docs/error-handling,
+  https://docs.trade.mudrex.com/docs/overview,
+  https://mudrex.com/security, https://mudrex.com/fee-and-compliance
+description: >-
+  Which cross-cutting standards the Mudrex API surface conforms to, asserted
+  from the published documentation and from live probes. The organisational
+  compliance posture (ISO 27001:2022, SOC 2 Type II, FIU-IND registration) is
+  published; the API-level standards posture is thin — no OpenAPI, no OAuth, no
+  RFC 9457, no RFC 9116 security.txt, no RFC 8414/8615 discovery documents.
+standards:
+- id: openapi
+  conforms: false
+  evidence: >-
+    No OpenAPI or Swagger document found. Probed
+    https://trade.mudrex.com/openapi.json (404 JSON),
+    https://docs.trade.mudrex.com/openapi.json (404 HTML),
+    https://docs.trade.mudrex.com/reference (404) and the mudrex GitHub org
+    (12 repos, none carrying a spec) on 2026-08-04.
+- id: asyncapi
+  conforms: false
+  evidence: >-
+    A real WebSocket streaming surface is documented in prose at
+    https://docs.trade.mudrex.com/docs/websocket-streams but no AsyncAPI
+    document is published. Captured as asyncapi/mudrex-market-data-streams.yml.
+- id: mcp
+  conforms: true
+  evidence: >-
+    Official hosted Model Context Protocol server at https://mudrex.com/mcp,
+    documented at https://docs.trade.mudrex.com/docs/mcp; live JSON-RPC
+    tools/list returns 401 Invalid Authentication (server present, auth-gated).
+- id: llms-txt
+  conforms: true
+  evidence: https://docs.trade.mudrex.com/llms.txt returns 200 text/plain with the full documentation index.
+- id: oauth2
+  conforms: false
+  evidence: Single API-key header (X-Authentication); no OAuth 2.0 authorization or token endpoint documented.
+- id: oidc
+  conforms: false
+  evidence: /.well-known/openid-configuration returned 404 on mudrex.com (2026-08-04).
+- id: rfc8414-oauth-authorization-server
+  conforms: false
+  evidence: /.well-known/oauth-authorization-server 404 on mudrex.com (2026-08-04).
+- id: rfc9728-oauth-protected-resource
+  conforms: false
+  evidence: /.well-known/oauth-protected-resource 404 on mudrex.com and trade.mudrex.com (2026-08-04).
+- id: rfc9457-problem-details
+  conforms: false
+  evidence: >-
+    Errors use a proprietary envelope { success:false, errors:[{code,text}] };
+    no application/problem+json media type.
+- id: rfc9116-security-txt
+  conforms: false
+  evidence: /.well-known/security.txt 404 on mudrex.com, trade.mudrex.com and docs.trade.mudrex.com (2026-08-04).
+- id: rfc8594-sunset-header
+  conforms: false
+  evidence: No Sunset/Deprecation header support and no deprecation policy documented.
+- id: a2a-agent-card
+  conforms: false
+  evidence: >-
+    /.well-known/agent-card.json and /.well-known/agent.json returned 404 on
+    mudrex.com, trade.mudrex.com and docs.trade.mudrex.com (2026-08-04).
+- id: idempotency
+  conforms: false
+  evidence: No idempotency key or replay semantics documented for any write operation.
+- id: pagination
+  conforms: partial
+  evidence: >-
+    List endpoints take limit + offset, but `offset` is an end-time boundary in
+    epoch milliseconds rather than a row offset or an opaque cursor.
+- id: tls
+  conforms: true
+  evidence: TLSv1.3 with HSTS max-age 31536000 on mudrex.com and docs.trade.mudrex.com (probed 2026-08-04); see security/mudrex-domain-security.yml.
+- id: dnssec
+  conforms: true
+  evidence: DNSSEC enabled on mudrex.com; CAA records present (probed 2026-08-04).
+compliance_programs:
+- id: iso-27001-2022
+  published: true
+  evidence: https://mudrex.com/security — "ISO 27001:2022"
+- id: soc-2-type-ii
+  published: true
+  evidence: >-
+    https://mudrex.com/security — "SOC Type 2", described as continuously
+    audited with quarterly reviews and annual re-certification.
+- id: fiu-ind-registration
+  published: true
+  evidence: >-
+    "FIU REGISTERED" badge across mudrex.com; Mudrex is registered with India's
+    Financial Intelligence Unit as a Virtual Digital Asset Service Provider.
+- id: india-tax-withholding
+  published: true
+  evidence: >-
+    https://mudrex.com/fee-and-compliance documents automated 1% TDS on spot and
+    Web3 sells and 18% GST on trading fees for Indian users.
+detail: security/mudrex-trust-center.yml

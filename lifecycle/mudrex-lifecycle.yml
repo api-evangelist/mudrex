@@ -1,0 +1,64 @@
+generated: '2026-08-04'
+method: searched
+source: >-
+  https://docs.trade.mudrex.com/docs/changelogs,
+  https://docs.trade.mudrex.com/docs/overview,
+  https://docs.trade.mudrex.com/docs/api-terms-conditions;
+  status-page probes of status.mudrex.com and mudrex.status.io (DNS NXDOMAIN, 2026-08-04)
+description: >-
+  Mudrex versions the Futures API in the URI path (/fapi/v1) and tracks
+  documentation releases v1.0.0 → v1.0.9 in a dated changelog. Every release so
+  far is additive: no entry records a breaking change or a deprecation. There is
+  no published deprecation policy, no RFC 8594 Sunset/Deprecation header
+  support, no SLA and no public status page — but the API terms do reserve a
+  broad unilateral right to modify, suspend or discontinue the API, which is the
+  live operational risk for anyone building on it.
+versioning:
+  scheme: uri-path
+  current: v1
+  base_path: /fapi/v1
+  release_version: v1.0.9
+  release_date: '2026-06-26'
+  header: null
+  docs: https://docs.trade.mudrex.com/docs/overview
+  changelog: https://docs.trade.mudrex.com/docs/changelogs
+deprecation:
+  policy_url: null
+  sunset_header: false
+  deprecation_header: false
+  practice: >-
+    Each changelog release note carries an explicit "Deprecations:" line; every
+    published entry to date says "No". That is a disclosure practice, not a
+    policy — no notice period, no supported-version window and no migration
+    commitment is published.
+  terms_clause: >-
+    The API Terms & Conditions reserve the right to modify, suspend or
+    discontinue the API, in whole or in part, and state that continued use
+    constitutes acceptance of changes.
+    (https://docs.trade.mudrex.com/docs/api-terms-conditions)
+sla:
+  url: null
+  uptime_target: null
+  note: No uptime commitment is published for the API.
+status_page: null
+status_page_probes:
+- {url: 'https://status.mudrex.com/', result: DNS NXDOMAIN, checked: '2026-08-04'}
+- {url: 'https://mudrex.status.io/', result: DNS NXDOMAIN, checked: '2026-08-04'}
+sandbox:
+  available: false
+  detail: >-
+    API Terms & Conditions §6.3: "You acknowledge that Mudrex does not provide
+    any sandbox, simulation, or testnet environment for the API. All API
+    interactions are executed in a live trading environment, and you bear full
+    responsibility for any consequences arising therefrom."
+  artifact: sandbox/mudrex-sandbox.yml
+deprecated_operations: []
+support:
+  channel: https://mudrex.com/support
+  email: help@mudrex.com
+  legacy_caas: support.caas@mudrex.com
+gaps:
+- No public status page or incident history for a live trading API.
+- No SLA or uptime target.
+- No deprecation policy, notice period, or Sunset/Deprecation header support.
+- No sandbox — every integration is developed against live funds.

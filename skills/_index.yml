@@ -1,0 +1,41 @@
+generated: '2026-08-04'
+method: generated
+source: >-
+  https://docs.trade.mudrex.com/docs/quick-reference and
+  https://docs.trade.mudrex.com/docs/mcp — every operation and tool named in
+  these skills was verified against the provider's published endpoint tables and
+  MCP tool tables. Mudrex publishes no OpenAPI, so operations are cited as
+  documented HTTP method + path rather than operationIds.
+description: >-
+  Packaged agent operating instructions for the three marquee Mudrex flows:
+  placing a futures order, managing risk on an open position, and reading the
+  public market-data surface. Each skill carries the conventions that OpenAPI
+  would not have expressed anyway for this provider — the three symbol formats,
+  the currency-scoping rule, the time-boundary `offset`, string-encoded
+  numerics, and the absence of both a sandbox and an idempotency key.
+skills:
+- file: mudrex-place-futures-order.md
+  name: Place a Mudrex futures order
+  api: mudrex:mudrex-futures-trading-api
+  operations: ['GET /wallet/funds', 'POST /wallet/futures/transfer', 'GET /futures', 'GET /futures/{asset_id}', 'POST /futures/{asset_id}/leverage', 'POST /futures/{asset_id}/order', 'GET /futures/orders']
+  mcp_tools: [list_futures, get_future, set_leverage, place_order, get_orders]
+  writes: true
+- file: mudrex-manage-position-risk.md
+  name: Manage risk on an open Mudrex position
+  api: mudrex:mudrex-futures-trading-api
+  operations: ['GET /futures/positions', 'GET /futures/positions/{position_id}/liq-price', 'POST /futures/positions/{position_id}/riskorder', 'PATCH /futures/positions/{position_id}/riskorder', 'POST /futures/positions/{position_id}/add-margin', 'POST /futures/positions/{position_id}/close', 'POST /futures/positions/{position_id}/close/partial', 'POST /futures/positions/{position_id}/reverse', 'GET /futures/positions/history']
+  mcp_tools: [get_positions, get_liquidation_price, place_risk_order, amend_risk_order, add_margin, close_position, reverse_position, get_position_history]
+  writes: true
+- file: mudrex-stream-market-data.md
+  name: Read and stream Mudrex market data
+  api: mudrex:mudrex-market-data-api
+  operations: ['GET /price/kline', 'GET /price/mark-kline', 'WS /price/ws/linear']
+  mcp_tools: []
+  writes: false
+  auth: none
+safety:
+  sandbox: false
+  note: >-
+    Mudrex provides no sandbox or testnet (API Terms §6.3), and no idempotency
+    key on any write. Every write skill above instructs the agent to confirm
+    with the user and to read state back before retrying.
