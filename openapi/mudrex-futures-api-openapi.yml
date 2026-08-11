@@ -1,0 +1,147 @@
+openapi: 3.2.0
+info:
+  title: Trading Futures API
+  version: 1.0.0
+  x-source-url: https://dash.readme.com/api/v1/api-registry/1l63p11jmi48ir8h
+  x-documentation-url: https://docs.trade.mudrex.com/docs/overview
+  x-last-validated: '2026-08-10'
+  x-provenance: first-party — retrieved from the provider's own documentation host
+servers:
+- url: http://{{tradeurl}}
+tags:
+- name: Futures
+paths:
+  /fapi/v1/futures/transfer:
+    get:
+      tags:
+      - Futures
+      summary: Available Funds
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /fapi/v1/futures:
+    get:
+      tags:
+      - Futures
+      summary: Assets (Listing)
+      parameters:
+      - name: limit
+        in: query
+        schema:
+          type: integer
+        example: '10'
+      - name: offset
+        in: query
+        schema:
+          type: integer
+        example: '0'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /fapi/v1/futures/{asset_id}:
+    get:
+      tags:
+      - Futures
+      summary: Asset
+      parameters:
+      - name: asset_id
+        in: path
+        schema:
+          type: string
+        required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /fapi/v1/futures/{asset_id}/leverage:
+    get:
+      tags:
+      - Futures
+      summary: Leverage
+      parameters:
+      - name: asset_id
+        in: path
+        schema:
+          type: string
+        required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+    post:
+      tags:
+      - Futures
+      summary: Leverage
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                margin_type: ISOLATED
+                leverage: 1.5
+      parameters:
+      - name: asset_id
+        in: path
+        schema:
+          type: string
+        required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /fapi/v1/futures/{asset_id}/order:
+    post:
+      tags:
+      - Futures
+      summary: Trade (Place Order)
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                leverage: 97.98
+                quantity: 0.001
+                order_price: 107526
+                order_type: LONG
+                trigger_type: MARKET
+                is_takeprofit: true
+                is_stoploss: true
+                stoploss_price: 106900
+                takeprofit_price: 110000
+                reduce_only: false
+      parameters:
+      - name: asset_id
+        in: path
+        schema:
+          type: string
+        required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /fapi/v1/futures/fee/history:
+    get:
+      tags:
+      - Futures
+      summary: Fee History
+      parameters:
+      - name: limit
+        in: query
+        schema:
+          type: integer
+        example: '10'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}

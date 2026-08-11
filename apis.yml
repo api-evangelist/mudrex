@@ -46,16 +46,13 @@ apis:
   - Wallet
   - Fees
   description: >-
-    Programmatic control over a Mudrex futures trading account. Transfer funds
-    between the spot and futures wallets (USDT and INR), list tradeable
-    instruments and contract specifications, get and set leverage and margin type
-    per (asset, currency), place market and limit LONG/SHORT orders with optional
-    attached stop-loss and take-profit, amend and cancel orders, query open orders
-    and order history, manage open positions (add/reduce margin, estimate
-    liquidation price, set and edit SL/TP, partial close, reverse, square off),
-    and retrieve trading and funding fee history. Authenticated with an
-    X-Authentication API-key header; responses are a JSON envelope with numeric
-    values as strings to preserve precision.
+    Programmatic control over a Mudrex futures trading account. Transfer funds between the spot and futures
+    wallets (USDT and INR), list tradeable instruments and contract specifications, get and set leverage
+    and margin type per (asset, currency), place market and limit LONG/SHORT orders with optional attached
+    stop-loss and take-profit, amend and cancel orders, query open orders and order history, manage open
+    positions (add/reduce margin, estimate liquidation price, set and edit SL/TP, partial close, reverse,
+    square off), and retrieve trading and funding fee history. Authenticated with an X-Authentication
+    API-key header; responses are a JSON envelope with numeric values as strings to preserve precision.
   properties:
   - url: https://docs.trade.mudrex.com/docs/overview
     type: Documentation
@@ -75,15 +72,12 @@ apis:
   - WebSocket
   - Streaming
   description: >-
-    Public, unauthenticated market-data surface for Mudrex linear perpetual
-    futures. Over REST it returns bulk historical OHLCV price klines
-    (GET /price/kline, up to 25 assets and 1440 candles per asset) and OHLC
-    mark-price klines (GET /price/mark-kline). Over WebSocket
-    (wss://trade.mudrex.com/fapi/v1/price/ws/linear) it streams 1-second and
-    1-minute klines and mark-klines plus 1-second and 5-second tickers, using a
-    SUBSCRIBE / UNSUBSCRIBE / LIST_SUBSCRIPTIONS envelope. Rate-limited per IP at
-    300 REST requests per minute, 15 active subscriptions per connection and 10
-    new connections per minute.
+    Public, unauthenticated market-data surface for Mudrex linear perpetual futures. Over REST it returns
+    bulk historical OHLCV price klines (GET /price/kline, up to 25 assets and 1440 candles per asset)
+    and OHLC mark-price klines (GET /price/mark-kline). Over WebSocket (wss://trade.mudrex.com/fapi/v1/price/ws/linear)
+    it streams 1-second and 1-minute klines and mark-klines plus 1-second and 5-second tickers, using
+    a SUBSCRIBE / UNSUBSCRIBE / LIST_SUBSCRIPTIONS envelope. Rate-limited per IP at 300 REST requests
+    per minute, 15 active subscriptions per connection and 10 new connections per minute.
   properties:
   - url: https://docs.trade.mudrex.com/docs/market-data
     type: Documentation
@@ -100,12 +94,11 @@ apis:
   - Agents
   - Trading
   description: >-
-    Mudrex's official hosted Model Context Protocol server, which exposes the
-    Mudrex Futures Trading API to MCP-capable AI assistants as 20 tools across
-    orders, positions, risk management (stop-loss/take-profit), leverage and
-    margin, and market/account info. Connected over mcp-remote with the same
-    X-Authentication API secret used by the REST API; state-changing tools are
-    marked as requiring user confirmation in the provider's documentation.
+    Mudrex's official hosted Model Context Protocol server, which exposes the Mudrex Futures Trading API
+    to MCP-capable AI assistants as 20 tools across orders, positions, risk management (stop-loss/take-profit),
+    leverage and margin, and market/account info. Connected over mcp-remote with the same X-Authentication
+    API secret used by the REST API; state-changing tools are marked as requiring user confirmation in
+    the provider's documentation.
   properties:
   - url: https://docs.trade.mudrex.com/docs/mcp
     type: Documentation
@@ -113,6 +106,69 @@ apis:
     type: MCPServer
   - url: mcp/mudrex-tool-crosswalk.yml
     type: ToolCrosswalk
+- aid: mudrex:mudrex-futures-api
+  name: Mudrex Futures API
+  description: The Futures API from Mudrex — 6 operation(s) for futures.
+  humanURL: https://docs.trade.mudrex.com/docs/overview
+  baseURL: https://trade.mudrex.com/fapi/v1
+  tags:
+  - Futures
+  properties:
+  - type: OpenAPI
+    url: openapi/mudrex-futures-api-openapi.yml
+- aid: mudrex:mudrex-futures-orders-api
+  name: Mudrex Futures > Orders API
+  description: The Futures > Orders API from Mudrex — 3 operation(s) for futures > orders.
+  humanURL: https://docs.trade.mudrex.com/docs/overview
+  baseURL: https://trade.mudrex.com/fapi/v1
+  tags:
+  - Futures > Orders
+  properties:
+  - type: OpenAPI
+    url: openapi/mudrex-futures-orders-api-openapi.yml
+- aid: mudrex:mudrex-futures-positions-api
+  name: Mudrex Futures > Positions API
+  description: The Futures > Positions API from Mudrex — 3 operation(s) for futures > positions.
+  humanURL: https://docs.trade.mudrex.com/docs/overview
+  baseURL: https://trade.mudrex.com/fapi/v1
+  tags:
+  - Futures > Positions
+  properties:
+  - type: OpenAPI
+    url: openapi/mudrex-futures-positions-api-openapi.yml
+- aid: mudrex:mudrex-futures-positions-close-api
+  name: Mudrex Futures > Positions > Close API
+  description: >-
+    The Futures > Positions > Close API from Mudrex — 2 operation(s) for futures > positions > close.
+  humanURL: https://docs.trade.mudrex.com/docs/overview
+  baseURL: https://trade.mudrex.com/fapi/v1
+  tags:
+  - Futures > Positions > Close
+  properties:
+  - type: OpenAPI
+    url: openapi/mudrex-futures-positions-close-api-openapi.yml
+- aid: mudrex:mudrex-futures-positions-risk-order-api
+  name: Mudrex Futures > Positions > Risk Order API
+  description: >-
+    The Futures > Positions > Risk Order API from Mudrex — 1 operation(s) for futures > positions > risk
+    order.
+  humanURL: https://docs.trade.mudrex.com/docs/overview
+  baseURL: https://trade.mudrex.com/fapi/v1
+  tags:
+  - Futures > Positions > Risk Order
+  properties:
+  - type: OpenAPI
+    url: openapi/mudrex-futures-positions-risk-order-api-openapi.yml
+- aid: mudrex:mudrex-wallet-api
+  name: Mudrex Wallet API
+  description: The Wallet API from Mudrex — 2 operation(s) for wallet.
+  humanURL: https://docs.trade.mudrex.com/docs/overview
+  baseURL: https://trade.mudrex.com/fapi/v1
+  tags:
+  - Wallet
+  properties:
+  - type: OpenAPI
+    url: openapi/mudrex-wallet-api-openapi.yml
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
