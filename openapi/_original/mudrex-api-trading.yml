@@ -1,0 +1,412 @@
+openapi: 3.0.0
+info:
+  title: API Trading
+  version: 1.0.0
+  x-source-url: https://dash.readme.com/api/v1/api-registry/1l63p11jmi48ir8h
+  x-documentation-url: https://docs.trade.mudrex.com/docs/overview
+  x-last-validated: '2026-08-10'
+  x-provenance: first-party — retrieved from the provider's own documentation host
+servers:
+- url: http://{{tradeurl}}
+tags:
+- name: Futures
+- name: Futures > Orders
+- name: Futures > Positions
+- name: Futures > Positions > Risk Order
+- name: Futures > Positions > Close
+- name: Wallet
+paths:
+  /fapi/v1/futures/orders:
+    get:
+      tags:
+      - Futures > Orders
+      summary: Open Orders
+      parameters:
+      - name: limit
+        in: query
+        schema:
+          type: integer
+        example: '20'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /fapi/v1/futures/orders/history:
+    get:
+      tags:
+      - Futures > Orders
+      summary: Order History
+      parameters:
+      - name: limit
+        in: query
+        schema:
+          type: integer
+        example: '20'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /fapi/v1/futures/orders/{order_id}:
+    get:
+      tags:
+      - Futures > Orders
+      summary: Get Order
+      parameters:
+      - name: order_id
+        in: path
+        schema:
+          type: string
+        required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+    patch:
+      tags:
+      - Futures > Orders
+      summary: Amend
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                order_price: 107526
+                stoploss_price: 106900
+                takeprofit_price: 110000
+                stoploss_order_id: <order_id>
+                takeprofit_order_id: <order_id>
+                id: <asset_id>
+                trigger_type: MARKET
+                is_takeprofit: true
+                is_stoploss: true
+      parameters:
+      - name: order_id
+        in: path
+        schema:
+          type: string
+        required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+    delete:
+      tags:
+      - Futures > Orders
+      summary: Cancel
+      parameters:
+      - name: order_id
+        in: path
+        schema:
+          type: string
+        required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /fapi/v1/futures/positions/{position_id}/riskorder:
+    post:
+      tags:
+      - Futures > Positions > Risk Order
+      summary: Place
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                stoploss_price: '123.45'
+                takeprofit_price: '150.00'
+                order_source: API
+                is_stoploss: true
+                is_takeprofit: false
+      parameters:
+      - name: position_id
+        in: path
+        schema:
+          type: string
+        required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+    patch:
+      tags:
+      - Futures > Positions > Risk Order
+      summary: Amend
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                order_price: '250.75'
+                stoploss_price: '230.00'
+                takeprofit_price: '280.00'
+                stoploss_order_id: <>
+                takeprofit_order_id: <>
+                id: 550e8400-e29b-41d4-a716-446655440000
+                order_id: <>
+                is_stoploss: true
+                is_takeprofit: false
+      parameters:
+      - name: position_id
+        in: path
+        schema:
+          type: string
+        required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /fapi/v1/futures/positions/{position_id}/close:
+    post:
+      tags:
+      - Futures > Positions > Close
+      summary: Complete
+      requestBody:
+        content: {}
+      parameters:
+      - name: position_id
+        in: path
+        schema:
+          type: string
+        required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /fapi/v1/futures/positions/{position_id}/close/partial:
+    post:
+      tags:
+      - Futures > Positions > Close
+      summary: Partial
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                order_type: LIMIT
+                quantity: '50.25'
+                limit_price: '102.75'
+      parameters:
+      - name: position_id
+        in: path
+        schema:
+          type: string
+        required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /fapi/v1/futures/positions:
+    get:
+      tags:
+      - Futures > Positions
+      summary: Open Positions
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /fapi/v1/futures/positions/history:
+    get:
+      tags:
+      - Futures > Positions
+      summary: Positions History
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /fapi/v1/futures/positions/{position_id}/reverse:
+    post:
+      tags:
+      - Futures > Positions
+      summary: Reverse
+      requestBody:
+        content: {}
+      parameters:
+      - name: position_id
+        in: path
+        schema:
+          type: string
+        required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /fapi/v1/futures/transfer:
+    get:
+      tags:
+      - Futures
+      summary: Available Funds
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /fapi/v1/futures:
+    get:
+      tags:
+      - Futures
+      summary: Assets (Listing)
+      parameters:
+      - name: limit
+        in: query
+        schema:
+          type: integer
+        example: '10'
+      - name: offset
+        in: query
+        schema:
+          type: integer
+        example: '0'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /fapi/v1/futures/{asset_id}:
+    get:
+      tags:
+      - Futures
+      summary: Asset
+      parameters:
+      - name: asset_id
+        in: path
+        schema:
+          type: string
+        required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /fapi/v1/futures/{asset_id}/leverage:
+    get:
+      tags:
+      - Futures
+      summary: Leverage
+      parameters:
+      - name: asset_id
+        in: path
+        schema:
+          type: string
+        required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+    post:
+      tags:
+      - Futures
+      summary: Leverage
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                margin_type: ISOLATED
+                leverage: 1.5
+      parameters:
+      - name: asset_id
+        in: path
+        schema:
+          type: string
+        required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /fapi/v1/futures/{asset_id}/order:
+    post:
+      tags:
+      - Futures
+      summary: Trade (Place Order)
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                leverage: 97.98
+                quantity: 0.001
+                order_price: 107526
+                order_type: LONG
+                trigger_type: MARKET
+                is_takeprofit: true
+                is_stoploss: true
+                stoploss_price: 106900
+                takeprofit_price: 110000
+                reduce_only: false
+      parameters:
+      - name: asset_id
+        in: path
+        schema:
+          type: string
+        required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /fapi/v1/futures/fee/history:
+    get:
+      tags:
+      - Futures
+      summary: Fee History
+      parameters:
+      - name: limit
+        in: query
+        schema:
+          type: integer
+        example: '10'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /fapi/v1/wallet/funds:
+    get:
+      tags:
+      - Wallet
+      summary: Get (SPOT) Funds
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /fapi/v1/wallet/futures/transfer:
+    post:
+      tags:
+      - Wallet
+      summary: Transfer Funds
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                from_wallet_type: SPOT
+                to_wallet_type: FUTURES
+                amount: 10.5
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
