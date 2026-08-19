@@ -2,17 +2,13 @@ generated: '2026-08-04'
 method: searched
 status: published
 source: https://docs.trade.mudrex.com/docs/mcp
-description: >-
-  Mudrex operates an official hosted MCP server at https://mudrex.com/mcp that
-  converts the Mudrex Futures Trading API into MCP tools for AI assistants.
-  Clients connect through mcp-remote and authenticate with the same
-  X-Authentication API secret used by the REST API (the header is passed on the
-  connection, not an OAuth flow). The tool list below is captured verbatim from
-  the provider's MCP documentation page, including the provider's own
-  "Confirmation required" marking on state-changing tools. A live
-  `tools/list` JSON-RPC POST to https://mudrex.com/mcp returned HTTP 401
-  {"errors":[{"code":3100,"text":"Invalid Authentication"}]} on 2026-08-04, so
-  the machine-readable inputSchema for each tool requires an authenticated
+description: Mudrex operates an official hosted MCP server at https://mudrex.com/mcp that converts the
+  Mudrex Futures Trading API into MCP tools for AI assistants. Clients connect through mcp-remote and
+  authenticate with the same X-Authentication API secret used by the REST API (the header is passed on
+  the connection, not an OAuth flow). The tool list below is captured verbatim from the provider's MCP
+  documentation page, including the provider's own "Confirmation required" marking on state-changing tools.
+  A live `tools/list` JSON-RPC POST to https://mudrex.com/mcp returned HTTP 401 {"errors":[{"code":3100,"text":"Invalid
+  Authentication"}]} on 2026-08-04, so the machine-readable inputSchema for each tool requires an authenticated
   introspection and is not captured here.
 server:
   name: mudrex
@@ -20,16 +16,9 @@ server:
   url: https://mudrex.com/mcp
   auth: api-key
   auth_header: X-Authentication
-  client_config: |
-    {
-      "mcpServers": {
-        "mcp-futures-trading": {
-          "command": "npx",
-          "args": ["-y", "mcp-remote", "https://mudrex.com/mcp", "--header", "X-Authentication:${API_SECRET}"],
-          "env": { "API_SECRET": "<your-api-secret>" }
-        }
-      }
-    }
+  client_config: "{\n  \"mcpServers\": {\n    \"mcp-futures-trading\": {\n      \"command\": \"npx\",\n\
+    \      \"args\": [\"-y\", \"mcp-remote\", \"https://mudrex.com/mcp\", \"--header\", \"X-Authentication:${API_SECRET}\"\
+    ],\n      \"env\": { \"API_SECRET\": \"<your-api-secret>\" }\n    }\n  }\n}\n"
 x-evidence:
   fetched: '2026-08-04'
   url: https://mudrex.com/mcp
@@ -124,3 +113,10 @@ prerequisites:
 - Generate an API key at https://mudrex.com/pro-trading and store the secret (shown once).
 - Funds must be moved from the SPOT to the FUTURES wallet via the app or web platform before trading.
 crosswalk: mcp/mudrex-tool-crosswalk.yml
+deployment:
+  mode: remote
+  endpoint: https://mudrex.com/mcp
+  verified: probed
+  probe: wall
+  checked: '2026-08-12'
+  source: catalog MCP census
