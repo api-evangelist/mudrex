@@ -27,6 +27,16 @@ tags:
 - Cryptocurrency
 - Trading
 - Futures
+- Financial-Services
+- Fintech
+- Market Data
+- Exchange
+- India
+tags_raw:
+- Company
+- Cryptocurrency
+- Trading
+- Futures
 - Financial Services
 - Fintech
 - Market Data
@@ -38,6 +48,14 @@ apis:
   humanURL: https://docs.trade.mudrex.com/docs/overview
   baseURL: https://trade.mudrex.com/fapi/v1
   tags:
+  - Futures
+  - Trading
+  - Order
+  - Positions
+  - Leverage
+  - Wallets
+  - Fees
+  tags_raw:
   - Futures
   - Trading
   - Orders
