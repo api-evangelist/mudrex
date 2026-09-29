@@ -1,0 +1,106 @@
+openapi: 3.2.0
+info:
+  title: Trading Futures > Orders API
+  version: 1.0.0
+  x-source-url: https://dash.readme.com/api/v1/api-registry/1l63p11jmi48ir8h
+  x-documentation-url: https://docs.trade.mudrex.com/docs/overview
+  x-last-validated: '2026-08-10'
+  x-provenance: first-party — retrieved from the provider's own documentation host
+servers:
+- url: http://{{tradeurl}}
+tags:
+- name: Futures > Orders
+paths:
+  /fapi/v1/futures/orders:
+    get:
+      tags:
+      - Futures > Orders
+      summary: Open Orders
+      parameters:
+      - name: limit
+        in: query
+        schema:
+          type: integer
+        example: '20'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /fapi/v1/futures/orders/history:
+    get:
+      tags:
+      - Futures > Orders
+      summary: Order History
+      parameters:
+      - name: limit
+        in: query
+        schema:
+          type: integer
+        example: '20'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /fapi/v1/futures/orders/{order_id}:
+    get:
+      tags:
+      - Futures > Orders
+      summary: Get Order
+      parameters:
+      - name: order_id
+        in: path
+        schema:
+          type: string
+        required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+    patch:
+      tags:
+      - Futures > Orders
+      summary: Amend
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                order_price: 107526
+                stoploss_price: 106900
+                takeprofit_price: 110000
+                stoploss_order_id: <order_id>
+                takeprofit_order_id: <order_id>
+                id: <asset_id>
+                trigger_type: MARKET
+                is_takeprofit: true
+                is_stoploss: true
+      parameters:
+      - name: order_id
+        in: path
+        schema:
+          type: string
+        required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+    delete:
+      tags:
+      - Futures > Orders
+      summary: Cancel
+      parameters:
+      - name: order_id
+        in: path
+        schema:
+          type: string
+        required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}

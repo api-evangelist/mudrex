@@ -1,0 +1,51 @@
+openapi: 3.2.0
+info:
+  title: Trading Futures > Positions API
+  version: 1.0.0
+  x-source-url: https://dash.readme.com/api/v1/api-registry/1l63p11jmi48ir8h
+  x-documentation-url: https://docs.trade.mudrex.com/docs/overview
+  x-last-validated: '2026-08-10'
+  x-provenance: first-party — retrieved from the provider's own documentation host
+servers:
+- url: http://{{tradeurl}}
+tags:
+- name: Futures > Positions
+paths:
+  /fapi/v1/futures/positions:
+    get:
+      tags:
+      - Futures > Positions
+      summary: Open Positions
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /fapi/v1/futures/positions/history:
+    get:
+      tags:
+      - Futures > Positions
+      summary: Positions History
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /fapi/v1/futures/positions/{position_id}/reverse:
+    post:
+      tags:
+      - Futures > Positions
+      summary: Reverse
+      requestBody:
+        content: {}
+      parameters:
+      - name: position_id
+        in: path
+        schema:
+          type: string
+        required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}

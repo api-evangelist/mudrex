@@ -1,0 +1,70 @@
+openapi: 3.2.0
+info:
+  title: Trading Futures > Positions > Risk Order API
+  version: 1.0.0
+  x-source-url: https://dash.readme.com/api/v1/api-registry/1l63p11jmi48ir8h
+  x-documentation-url: https://docs.trade.mudrex.com/docs/overview
+  x-last-validated: '2026-08-10'
+  x-provenance: first-party — retrieved from the provider's own documentation host
+servers:
+- url: http://{{tradeurl}}
+tags:
+- name: Futures > Positions > Risk Order
+paths:
+  /fapi/v1/futures/positions/{position_id}/riskorder:
+    post:
+      tags:
+      - Futures > Positions > Risk Order
+      summary: Place
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                stoploss_price: '123.45'
+                takeprofit_price: '150.00'
+                order_source: API
+                is_stoploss: true
+                is_takeprofit: false
+      parameters:
+      - name: position_id
+        in: path
+        schema:
+          type: string
+        required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+    patch:
+      tags:
+      - Futures > Positions > Risk Order
+      summary: Amend
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                order_price: '250.75'
+                stoploss_price: '230.00'
+                takeprofit_price: '280.00'
+                stoploss_order_id: <>
+                takeprofit_order_id: <>
+                id: 550e8400-e29b-41d4-a716-446655440000
+                order_id: <>
+                is_stoploss: true
+                is_takeprofit: false
+      parameters:
+      - name: position_id
+        in: path
+        schema:
+          type: string
+        required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}

@@ -1,0 +1,24 @@
+{
+  "provider": "mudrex",
+  "sources": [
+    "mudrex-api-trading.yml"
+  ],
+  "outputs": [
+    "mudrex-futures-api-openapi.yml",
+    "mudrex-futures-orders-api-openapi.yml",
+    "mudrex-futures-positions-api-openapi.yml",
+    "mudrex-futures-positions-close-api-openapi.yml",
+    "mudrex-futures-positions-risk-order-api-openapi.yml",
+    "mudrex-wallet-api-openapi.yml"
+  ],
+  "archived": [
+    "archived openapi/mudrex-api-trading.yml"
+  ],
+  "errors": [],
+  "warnings": [],
+  "notes": [
+    "mudrex-api-trading.yml: upgraded openapi 3.0.0 -> OpenAPI 3.2.0",
+    "apis.yml register: written (+6 apis, 9 total)"
+  ],
+  "skipped": []
+}
