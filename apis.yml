@@ -54,7 +54,7 @@ tags:
 - Cryptocurrency
 - Trading
 - Futures
-- Financial-Services
+- Financial Services
 - Fintech
 - Market Data
 - Exchange
@@ -69,6 +69,7 @@ tags_raw:
 - Market Data
 - Exchange
 - India
+- Financial-Services
 apis:
 - aid: mudrex:mudrex-futures-trading-api
   name: Mudrex Futures Trading API
