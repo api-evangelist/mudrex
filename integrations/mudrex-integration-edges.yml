@@ -42,7 +42,7 @@ edges:
     registered_name: io.github.mudrex/mcp-server
     register_id: io.github.mudrex/mcp-server
     detected_by: sweep-agent-tools.py
-    detected: '2026-10-14'
+    detected: '2026-10-15'
   mcp_registry:
     servers:
     - io.github.mudrex/mcp-server
