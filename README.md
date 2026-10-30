@@ -64,5 +64,118 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-Mudrex is a company surfaced via the API Evangelist harvest backlog (source: secondary-market) and added to the network as a stub for full-pipeline profiling.
-- https://forgeglobal.com/mudrex_stock/
+Mudrex is a US-headquartered, Bengaluru-based crypto investment and trading platform founded in 2018 and registered with India's Financial Intelligence Unit (FIU-IND). It serves retail and pro traders with spot trading, curated Coin Sets, and USDT- and INR-margined perpetual futures. Its developer surface is the Mudrex Futures API — a REST trading API under https://trade.mudrex.com/fapi/v1 covering wallet transfers, asset discovery, leverage and margin type, order create/amend/cancel, position management with stop-loss/take-profit, liquidation pricing and fee history — plus a public, unauthenticated market-data surface (historical price and mark-price klines over REST, live kline/mark-kline/ticker streams over WebSocket) and an officially hosted MCP server at https://mudrex.com/mcp that exposes 20 trading tools to AI agents. Authentication is a single X-Authentication API-key header issued after KYC and TOTP two-factor enrollment. An official Python SDK ships on PyPI as mudrex-sdk.
+
+**Areas:** Company · Cryptocurrency · Trading · Futures · Financial Services · Fintech · Market Data · Exchange · India
+
+## Mudrex on APIs.io
+
+Everything profiled for Mudrex is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/mudrex/](https://apis.io/providers/mudrex/)** — or go straight to one of the APIs or properties below.
+
+### APIs (3)
+
+- [Mudrex Futures Trading API](https://apis.io/apis/mudrex/mudrex-futures-trading-api/) — Programmatic control over a Mudrex futures trading account. Transfer funds between the spot and futures wallets (USDT and INR), list tradeable instruments…
+- [Mudrex Market Data API](https://apis.io/apis/mudrex/mudrex-market-data-api/) — Public, unauthenticated market-data surface for Mudrex linear perpetual futures. Over REST it returns bulk historical OHLCV price klines (GET /price/kline,…
+- [Mudrex MCP Server](https://apis.io/apis/mudrex/mudrex-mcp-server/) — Mudrex's official hosted Model Context Protocol server, which exposes the Mudrex Futures Trading API to MCP-capable AI assistants as 20 tools across orders,…
+
+### Published properties
+
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
+
+#### AsyncAPI (1)
+
+Event-driven and webhook contracts.
+
+- [Mudrex Market Data Streams](https://apis.io/asyncapis/mudrex/mudrex-market-data-streams/)
+
+#### MCP servers (1)
+
+Model Context Protocol servers that expose the API to agents.
+
+- [mudrex](https://apis.io/servers/mudrex/mudrex/)
+
+#### Security (3)
+
+Authentication, trust centre, and vulnerability disclosure.
+
+- [Mudrex Authentication](https://apis.io/security/mudrex/mudrex-authentication/)
+- [Mudrex Domain Security](https://apis.io/security/mudrex/mudrex-domain-security/)
+- [Mudrex Trust Center](https://apis.io/security/mudrex/mudrex-trust-center/)
+
+#### Rate limits (1)
+
+Published request limits.
+
+- [Mudrex Rate Limits](https://apis.io/rate-limits/mudrex/mudrex-rate-limits/)
+
+## Where to find this API
+
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
+
+- [Website](https://mudrex.com/)
+- [Documentation](https://docs.trade.mudrex.com/docs/overview)
+- [Getting started](https://docs.trade.mudrex.com/docs/quickstart)
+- [API reference](https://docs.trade.mudrex.com/docs/quick-reference)
+- [Pricing](https://mudrex.com/fee-and-compliance)
+- [Sign up](https://mudrex.com/login)
+- [Support](https://mudrex.com/support)
+- [Blog](https://mudrex.com/blog/)
+- [Compliance](https://mudrex.com/security)
+- [Terms of service](https://mudrex.com/terms)
+- [Privacy policy](https://mudrex.com/privacy)
+- [GitHub](https://github.com/mudrex)
+
+## API Evangelist rating
+
+**Kin Score 42.1** — developing · rubric 0.25.0 · scored 2026-10-23
+
+| Facet | Score |
+|---|---|
+| Discoverability | 80.0 |
+| Contract quality | 39.0 |
+| Contract governance | 18.2 |
+| Operational transparency | 50.0 |
+| Developer ergonomics | 49.4 |
+| Access clarity | 28.9 |
+
+**Agent readiness 29.5** — agent-ready
+
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | yes |
+| Agentic Access | — |
+| Reversibility Documented | — |
+| MCP Server | documented (partial credit) |
+| Auth Clarity | bearer (partial credit) |
+| Idempotency | — |
+| Error Semantics | documented (partial credit) |
+| OpenAPI Examples | — |
+| Rate Limit Signal | documented (partial credit) |
+| Event Surface Described | yes |
+| Agent Skills | derived (partial credit) |
+| Well Known Catalog | — |
+| Consent Identity | — |
+| Agent Card | — |
+| Dry Run Mode | — |
+| Delegated Identity | — |
+| Protected Resource Metadata | — |
+| Dynamic Client Registration | — |
+| Agentic Commerce | — |
+| Pagination Ratio | na |
+| Operation Distinctiveness | na |
+
+**Regulatory alignment 20.4** — Securities & Market Data
+
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/mudrex/](https://apis.io/providers/mudrex/).
+
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for Mudrex: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/mudrex/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
